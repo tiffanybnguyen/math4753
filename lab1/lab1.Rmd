@@ -1,0 +1,231 @@
+---
+title: "lab1"
+author: "Tiffany Nguyen"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+                          #   ╱|、
+                          # (˚ˎ 。7     meowwwww!!!
+                          #  |、˜〵          
+                          # じしˍ,)ノ
+```
+
+# Imports & Variables
+```{r}
+library(Intro2R)
+library(dplyr)
+library(data.table, warn.conflicts = FALSE)
+library(ggplot2)
+ddt <- read.csv("DDT.csv")
+dt <- as.data.table(ddt)
+```
+
+# Task 1
+```{r}
+getwd()
+```
+
+# Task 2
+```{r}
+head(ddt)
+```
+
+# Task 3
+
+1. The qualitative variables include "RIVER" and "SPECIES"
+
+2. The quantitative variables include "MILE", "LENGTH", "WEIGHT", and "DDT"
+
+3. 3 species
+```{r}
+length(unique(ddt["SPECIES"])$SPECIES)
+```
+or
+```{r}
+table(ddt$SPECIES)
+```
+I am confused by the question so here are the two possible answers.
+
+4. 
+```{r}
+ddt %>% filter(SPECIES == "LMBASS" & WEIGHT > 800)
+```
+
+5.
+```{r}
+ddt %>% filter(RIVER == "SCM" & DDT > 4.0)
+```
+
+# Task 4
+
+1. 
+```{r}
+mean(ddt$LENGTH)
+```
+
+2. 
+```{r}
+sd(ddt$WEIGHT)
+```
+
+3. 0 (no)
+```{r}
+plot(ddt$WEIGHT, ddt$LENGTH, xlab = "WEIGHT", ylab = "LENGTH", col = "red")
+```
+
+4. 1.00
+```{r}
+v = 1:20
+v/20
+```
+
+# Task 5
+
+1.
+```{r}
+table(dt$RIVER)
+```
+
+2.
+```{r}
+counts <- table(dt$RIVER)
+barplot(counts ,
+        main="Number of Observations by River", 
+        xlab="River", 
+        ylab="Count", 
+        col=rainbow(nrow(counts)))
+```
+
+3.
+```{r}
+table(ddt$RIVER, ddt$SPECIES)
+```
+
+4. 
+```{r}
+counts <- table(ddt$SPECIES, ddt$RIVER)
+barplot(counts,
+        beside=TRUE,
+        main="Number of Observations by River and Species",
+        xlab="River",
+        ylab="Count",
+        col=rainbow(nrow(counts)))
+
+legend("top", 
+       legend=rownames(counts),
+       fill=rainbow(nrow(counts)),
+       title="Species")
+```
+
+# Task 6
+
+1.
+```{r}
+pie(table(ddt$SPECIES),
+    main="Fish Species",
+    col=rainbow(length(table(ddt$SPECIES))))
+```
+
+2.
+```{r}
+pie(table(ddt$RIVER),
+    main="Rivers",
+    col=rainbow(length(table(ddt$RIVER))))
+```
+
+# Task 7
+
+1.
+```{r}
+boxplot(ddt$DDT,
+        main="Boxplot of DDT",
+        ylab="DDT",
+        col="lightpink")
+```
+
+2.
+```{r}
+boxplot(ddt$WEIGHT,
+        main="Boxplot of Weight",
+        ylab="Weight",
+        col="bisque")
+```
+
+3.
+```{r}
+boxplot(ddt$LENGTH,
+        main="Boxplot of Length",
+        ylab="Length",
+        col="paleturquoise2")
+```
+
+# Task 8
+
+1. 
+```{r}
+coplot(WEIGHT ~ LENGTH | RIVER,
+       data=ddt,
+       xlab="Length",
+       ylab="Weight",
+       col="lightslateblue",
+       panel=panel.smooth,
+       bg="yellowgreen",
+       pch=21)
+```
+
+2.
+```{r}
+coplot(WEIGHT ~ DDT | SPECIES,
+       data=ddt,
+       xlab="Length",
+       ylab="Weight",
+       col="lawngreen",
+       panel=panel.smooth,
+       bg="pink",
+       pch=21)
+```
+
+# Task 9
+
+1.
+```{r}
+ggplot(ddt, aes(x=SPECIES, y=WEIGHT, fill=RIVER)) +
+  geom_boxplot() +
+  labs(title="Tiffany Nguyen",
+       x="Species",
+       y="Weight") +
+  scale_fill_manual(values=c("powderblue","olivedrab3","khaki2","hotpink1")) +
+  theme_minimal()
+
+```
+
+2.
+```{r}
+ggplot(ddt, aes(x=RIVER, y=LENGTH, fill=SPECIES)) +
+  geom_violin() +
+  labs(title="Tiffany Nguyen",
+       x="River",
+       y="Length") +
+  scale_fill_manual(values=c("lawngreen","peru","royalblue1")) +
+  theme_minimal()
+```
+
+3.
+```{r}
+ggplot(ddt, aes(x=WEIGHT, y=LENGTH, color=SPECIES)) +
+  geom_point() +
+  labs(title="Tiffany Nguyen",
+       x="Weight",
+       y="Length") +
+  scale_color_manual(values=c("CCATFISH"="orangered4","LMBASS"="sandybrown","SMBUFFALO"="mediumseagreen")) +
+  theme_minimal()
+```

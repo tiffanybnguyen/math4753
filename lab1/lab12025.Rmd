@@ -1,0 +1,30 @@
+---
+title: "lab1stuff"
+author: "Tiffany Nguyen"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+Lab 1 getting up to speed
+
+$\LaTeX$
+
+$$RSS=\sum_{i=1}^n r_i^2$$
+
+## Tasks
+
+### Task 1
+
+```{r}
+getwd()
+```
+
