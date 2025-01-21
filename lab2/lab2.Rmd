@@ -1,0 +1,32 @@
+---
+title: "lab2"
+author: "Tiffany Nguyen"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Task 1
+```{r}
+getwd()
+```
+
+# Task 2
+```{r}
+epagas <- read.csv("EPAGAS.csv")
+head(epagas)
+```
+
+# Task 3
+```{r}
+
+```
+
+# Task 4
+```{r}
+
+```
+
