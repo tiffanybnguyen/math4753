@@ -1,6 +1,6 @@
 # This is the directory structure to my data
 #This will be different on the lab computer and on your home computer
-dird="C:\\Users\\stew9983\\OneDrive - University of Oklahoma\\DATAxls\\"
+dird="/Users/tiffanynguyen/Documents/College/Sophomore/Spring_2025/Applied_Statistical_Methods/labs/lab2/"
 
 #my function to read data 
 myread=function(csv){
