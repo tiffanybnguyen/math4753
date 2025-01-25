@@ -9,6 +9,12 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r}
+#  ∧,,,∧
+# (  ̳• · • ̳)
+# /    づ♡ statistics!
+```
+
 # Task 1
 ```{r}
 getwd()
@@ -22,11 +28,47 @@ head(epagas)
 
 # Task 3
 ```{r}
+mpg <- epagas$MPG
+z <- ( mpg - mean(mpg) ) / sd(mpg)
+outliers <- mpg[abs(z) >= 2 & abs(z) <= 3] # possible outliers
+
+mycol = ifelse(abs(z)>3, 
+               "Red",
+        ifelse(abs(z) >= 2 & abs(z) <= 3,
+               "Blue", 
+               "Black")
+        )  
+library(lattice)
+dotplot(mpg,
+        col=mycol,
+        xlab="mpg",
+        main="Tiffany Nguyen"
+        )
 
 ```
 
 # Task 4
 ```{r}
+library(ggplot2)
+# i think the plot is already horizontal?
+ggplot(epagas, aes(x=MPG)) + 
+  geom_boxplot(fill="black", 
+               notch=TRUE) + 
+  labs(title="MPG Distribution", 
+       x="MPG")
 
+# =＾● ⋏ ●＾= Cheby's Theorem =＾● ⋏ ●＾=
+chebyyy <- 1 - (1 / (2^2))
+chebyyy
+
+# Calculating exact proportion of data within 2 standard deviations
+proportion <- length( mpg[abs(z) < 2] ) / length(mpg)
+proportion
+
+# does Cheby agree? yes.
+proportion > chebyyy
 ```
 
+Using empirical rule, 95% of the data should be within 2 standard deviations of the mean. 
+This corresponds well: 0.96 - 0.95 = 0.01 --> 1% difference.
+Empirical rule is valid in this case; the estimated 95% is close to the actual 96%
