@@ -25,7 +25,46 @@ Notice that there are essentially only two parts
  1. Input (Controls)
  2. Render ( Often a plot)
 
+
 ```{r slr, echo=FALSE}
+library(ggplot2)
+# DATA
+spruce.df = read.csv("SPRUCE.csv")
+
+# INPUTS
+inputPanel(
+  
+  selectInput("plotg", "Choose plot type",
+      list(`points` = c("linear regression", "points alone", "points with segments")
+           )
+             )
+  
+)
+
+renderPlot({
+  
+  g = ggplot(spruce.df, aes(x = BHDiameter, y = Height)) + 
+             geom_point() +
+             labs(title="Height vs Diameter", 
+                  x="BHDiameter", 
+                  y="Height")
+  
+  linear = g + geom_smooth(method="lm")
+  points = g
+  points_with_segments = g + geom_line()
+  
+  if(input$plotg == "linear regression") print(linear)
+  
+  if(input$plotg == "points alone") print(points)
+  
+  if(input$plotg == "points with segments") print(points_with_segments)
+   
+})
+```
+
+original function
+```
+{r slr, echo=FALSE}
 library(ggplot2)
 # DATA
 spruce.df = read.csv("SPRUCE.csv")#MS pg478

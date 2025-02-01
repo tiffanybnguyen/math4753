@@ -1,11 +1,29 @@
 #This will be a different path if in the lab or at home
-dird="\\Users\\HyDRO-Lab\\Desktop\\MATH4753\\DATAxls\\"
+dird="/Users/tiffanynguyen/Documents/College/Sophomore/Spring_2025/Applied_Statistical_Methods/labs/lab3/DATAxls/"
 
+# Task 1
+getwd()
+
+# Task 2
+myread=function(csv){
+  fl=paste(dird,csv,sep="")
+  read.table(fl,header=TRUE,sep=",")
+}
+
+spruce.df=myread("SPRUCE.csv")
+head(spruce)
+
+# Task 3
+
+
+# helping code: steal for each part as necessary
+# --------------------------------------------------------------------------------------
 #my function to read data 
 myread=function(csv){
   fl=paste(dird,csv,sep="")
   read.table(fl,header=TRUE,sep=",")
 }
+
 #EASY WAY TO READ IN FILES
 fin.df=myread("FINTUBES.csv")
 spruce.df=myread("SPRUCE.csv")#MS pg478
