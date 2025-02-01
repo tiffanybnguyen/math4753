@@ -166,7 +166,7 @@ plot(y ~ x,
      xlim=c(0, 1.1 * max(x)),
      ylim=c(0, 1.1 * max(y))
 )
-with(spruce, abline(h=mean(y)))
+
 with(spruce, segments(BHDiameter, Height, BHDiameter, mean(Height), col="green"))
 
 # TSS calculation
