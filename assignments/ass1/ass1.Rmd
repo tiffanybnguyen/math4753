@@ -1,0 +1,459 @@
+---
+title: "ass1"
+author: "Tiffany Nguyen"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+Questions done: 15/15
+
+# ---- DATA and FUNCTIONS ----
+```{r}
+library(Intro2R)
+library(ggplot2)
+library(dplyr)
+library(plotrix)
+source("pareto.R")
+dird="/Users/tiffanynguyen/Documents/College/Sophomore/Spring_2025/Applied_Statistical_Methods/data/K25936_Downloads/Excel/"
+myread=function(csv){
+  fl=paste(dird,csv,sep="")
+  read.table(fl,header=TRUE,sep=",")
+}
+getmode <- function(v) {
+   uniqv <- unique(v)
+   uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+eq <- myread("EARTHQUAKE.csv")
+mtbe <- myread("MTBE.csv")
+swd <- myread("SWDEFECTS.csv")
+volt <- myread("VOLTAGE.csv")
+pipe <- myread("ROUGHPIPE.csv")
+ant <- myread("GOBIANTS.csv")
+gal <- myread("GALAXY2.csv")
+```
+
+## Question 1
+Final grade will be calculated as follows:
+
+* 15% - 4 assignments (each 3.75%)
+* 10% - Laboratories 
+* 10% - 2 projects (1st Project 3.33% (10/3), 2nd Project 6.67% (20/3))
+* 10% - In-class quizzes
+* 5% - Online chapter quizzes
+* 20% - Midterm
+* 30% - Final
+
+Grade scale:
+
+* A - [90%-100%]
+* B - [80%-90%)
+* C - [60%-80%)
+* D - [50%-60%)
+* F - < 50%
+
+How to work out final grades: 
+
+1. Calculate the average grade (in percent) for each category
+2. Multiply the average grade by its categorical weight
+3. Sum the results from step 2 to get the final grade
+
+## Question 2
+
+### a
+```{r}
+# d <- read.table("DDT.csv", header=TRUE, sep=",")
+r <- rainbow(length(unique(ddt$MILE)))
+m=with(ddt, as.numeric(factor(MILE)))
+coplot(LENGTH ~ WEIGHT | RIVER * SPECIES,
+       data=ddt,
+       xlab="Weight",
+       ylab="Length",
+       col=rep(r, table(ddt$MILE)),
+       pch=21
+       )
+
+```
+
+### b
+```{r}
+# y ~ x + I(x^2) : I is "as is" operator and the carrot should be done algebraically
+# quadlm <- lm(y ~ x + I(x^2), data)
+# summary (quadlm)
+
+m=with(ddt, as.numeric(factor(MILE)))
+length(unique(m))
+```
+The lower left three conditional plots represent CCATFISH in rivers FCM, LCM, and SCM. There seems to be an increasing linear trend/relationship between length and weight.
+
+### c
+Line A basically creates a numeric representation of mile for each row in ddt, and maps it accordingly. 
+
+### d
+Line B counts the number of unique numeric values from line A 
+
+### e
+The top 6 plots are empty because there is no data for LMBASS and SMBUFFALO in rivers FCM, LCM, and SCM.
+
+### f
+```{r}
+head(ddt)
+mean(ddt[ddt$RIVER=="FCM" & ddt$SPECIES=="CCATFISH",]$DDT)
+
+```
+
+## Question 3
+
+a. Quantitative 
+b. Quantitative
+c. Qualitative
+d. Quantitative
+e. Qualitative
+f. Quantitative
+g. Qualitative
+
+## Question 4
+
+#### Simple Random Sample: 
+Samples are selected from a population that ensures every subset in the population has an equal chance of being included in the sample. 
+
+#### Stratified Random Sampling: 
+Random samples of experimental units are obtained for each strata. Strata are experimental units associated with the population that can be separated into groups.
+
+#### Cluster Sampling: 
+Samples are selected from natural groupings/clusters and data is collected from all experimental units within each cluster
+
+#### Systematic Sampling: 
+Samples are selected every kth experimental unit from a list of all the experimental units 
+
+## Question 5
+
+```{r}
+ind <- sample(1:223, 5, replace=FALSE)
+mtbe[ind,]
+```
+
+### a
+```{r}
+# i
+mtbeo=na.omit(mtbe)
+
+# ii
+sd(mtbeo[mtbeo$Aquifier=="Bedrock",]$Depth)
+```
+
+## Question 6
+
+### a
+```{r}
+# i
+eq[sample(1:2929, 30, replace=FALSE),]$MAGNITUDE
+
+# ii
+plot(ts(eq$MAGNITUDE))
+median(eq$MAGNITUDE)
+```
+
+## Question 7
+
+a. Stratified random sampling
+b. Fish in the Tennessee River
+c. Capture location and species
+
+## Question 8
+
+a. Bar chart
+b. Types of Robotic Limbs
+c. Legs ONLY
+d. 
+
+```{r}
+freq=c(15, 8, 63, 20)
+RL=c("None", "Both", "Legs Only", "Wheels Only")
+table(rep(RL, freq)) / sum(freq)
+
+```
+
+e. 
+```{r}
+pareto(rep(RL, freq))
+```
+
+## Question 9
+
+a. Explorer
+```{r}
+products = c("Windows" = 32, "Explorer" = 6, "Office" = 12)
+pie(products, 
+    main="Microsoft Security Issues",
+    col=rainbow(length(products))
+)
+```
+
+b. Remote Code Execution
+```{r}
+freq = c(6, 8, 22, 3, 11)
+categories = c("Denial of Service", "Information Disclosure", "Remote Code Execution", "Spoofing", "Privilege Elevation")
+pareto(rep(categories, freq))
+```
+
+## Question 10
+
+```{r}
+head(swd)
+tab=table(swd$defect)
+rtab=tab/sum(tab)
+round(rtab, 2)
+pie3D(rtab, labels=list("OK", "Defective"), main="pie plot of SWD")
+
+```
+
+The module software code is most likely not going to be defective, but we can expect modules to be defective 10% of the time.
+
+## Question 11
+
+### a
+```{r}
+old<-subset(volt,subset=LOCATION=="OLD")
+old$VOLTAGE->vto
+lept<-min(vto)-0.05
+rept<-max(vto)+0.05
+rnge<-rept-lept
+inc<-rnge/9
+seq(lept, rept,by=inc)->cl
+cvto<-cut(vto,breaks=cl)
+old.tab=table(cvto)
+old.relative.freq <- old.tab / sum(old.tab)
+
+# barplot for old relative frequency
+barplot(old.relative.freq,space=0,main="Old Relative Frequency Barplot",las=2, ylab="Relative Frequency")
+
+# histogram for old relative frequency
+hist(vto, prob=TRUE, nclass=10, xlab="Voltage", ylab="Relative Frequency", main="Old Relative Frequency Histogram")
+```
+
+### b
+```{r}
+stem((volt %>% filter(LOCATION == "OLD"))$VOLTAGE)
+```
+The stem-and-leaf plot is more informative about where most of the voltage readings like because its much easier to see where the readings lie.
+
+### c
+```{r}
+new<-subset(volt,subset=LOCATION=="NEW")
+new$VOLTAGE->vtn
+lept<-min(vtn)-0.05
+rept<-max(vtn)+0.05
+rnge<-rept-lept
+inc<-rnge/9
+seq(lept, rept,by=inc)->cl
+cvtn<-cut(vtn,breaks=cl)
+new.tab=table(cvtn)
+relative.freq <- new.tab / sum(new.tab)
+
+# barplot for new relative frequency
+barplot(relative.freq,space=0,main="New Relative Frequency Barplot",las=2, ylab="Relative Frequency")
+
+# histogram for new relative frequency
+hist(vtn, prob=TRUE, nclass=10, xlab="Voltage", ylab="Relative Frequency", main="New Relative Frequency Histogram")
+```
+
+### d
+
+No, the new process is not as good as the old process. Most of the readings in the old location are above the 9.2/good process line whereas the new location is more dispersed. 
+
+### e
+```{r}
+mean(vto)
+median(vto)
+getmode(vto)
+mean(vtn)
+median(vtn)
+getmode(vtn)
+```
+
+The preferred measure of central tendency is mean because there are no outliers.
+
+### f
+```{r}
+(10.5-mean(vto))/sd(vto)
+```
+
+### g
+```{r}
+(10.5-mean(vtn))/sd(vtn)
+```
+
+### h
+
+A voltage reading of 10.50 is more likely to occur at the old location because the z-score is lower (less standard deviations from the mean).
+
+### i
+
+```{r}
+boxplot((volt %>% filter(LOCATION == "OLD"))$VOLTAGE)
+```
+
+There are a few outliers in the old location
+
+### j
+
+```{r}
+voltOld = (volt %>% filter(LOCATION == "OLD"))$VOLTAGE
+voltOldZ = (voltOld - mean(voltOld)) / sd(voltOld)
+
+voltOld[abs(voltOldZ) > 2]
+```
+There are 3 outliers in the old location
+
+### k
+
+```{r}
+boxplot((volt %>% filter(LOCATION == "NEW"))$VOLTAGE)
+```
+
+There seems to be no outliers at the new location
+
+### l
+
+```{r}
+voltNew = (volt %>% filter(LOCATION == "NEW"))$VOLTAGE
+voltNewZ = (voltNew - mean(voltNew)) / sd(voltNew)
+
+voltNew[abs(voltNewZ) > 2]
+```
+
+There are no outliers at the new location
+
+### m
+```{r}
+boxplot(cbind(voltOld, voltNew))
+```
+
+The voltage readings at the old location are higher than the voltage readings at the new location, but the old location has more outliers.
+
+
+## Question 12
+
+```{r}
+r=pipe$ROUGH
+mean(r)
+sd(r)
+```
+
+\begin{eqnarray}
+
+\bar{y} \pm 2s \\
+1.881 \pm 2(0.524) \\
+1.881 \pm 1.048 &=& (0.833, 2.929) \\
+
+\end{eqnarray}
+
+The interval that will likely contain about 95% of all coated pipe roughness measurements is (0.833, 2.929). 2 standard deviations are taken because approximate 95% of the data will fall within 2 standard deviations of the mean.
+
+## Question 13
+
+### a
+
+```{r}
+ant
+
+# average number ant species 
+mean(ant$AntSpecies)
+
+# number of ant species discovered at each site is around 5 ish
+median(ant$AntSpecies)
+
+# most common number of ant species discovered is 5
+getmode(ant$AntSpecies)
+```
+
+### b
+
+I would recommend median because there are many outliers.
+
+### c
+
+```{r}
+ds <- ant %>% filter(Region == "Dry Steppe")
+
+mean(ds$PlantCov)
+median(ds$PlantCov)
+getmode(ds$PlantCov)
+```
+
+### d
+
+```{r}
+gd <- ant %>% filter(Region == "Gobi Desert")
+
+mean(gd$PlantCov)
+median(gd$PlantCov)
+getmode(gd$PlantCov)
+```
+
+### e
+
+Yes, the center of total plant coverage are different in the two regions. Dry Steppe centers around the 40s whereas Gobi Desert centers around the 25-30s.
+
+## Question 14
+
+### a
+
+```{r}
+hist(gal$VELOCITY,
+     main="Velocity Distribution A1775",
+     xlab="Velocity (km/s)")
+
+```
+
+
+### b
+
+Yes, there are two peaks in the histogram which indicates there is evidence to support the double cluster theory.
+
+### c
+
+I am taking 21000 as the velocity to split the clusters.
+
+```{r}
+split = 21000
+
+galA <- gal[gal$VELOCITY < split,]
+galB <- gal[gal$VELOCITY >= split,]
+
+# mean for first galaxy
+mean(galA)
+
+# standard deviation for first galaxy 
+sd(galA)
+
+# mean for second galaxy
+mean(galB)
+
+# standard deviation for second galaxy
+sd(galB)
+```
+
+
+### d
+```{r}
+# z scores
+(20000-mean(galA))/sd(galA)
+(20000-mean(galB))/sd(galB)
+```
+This galaxy is likely to belong to A1775A because 20,000 km/s is 1.01 sd away from A1775A, compared to 5.06 sd away from A1775B.
+
+## Question 15
+```{r}
+ggplot(ddt, aes(x=RIVER, y=LENGTH, fill=SPECIES)) +
+  geom_boxplot() +
+  labs(title="Tiffany Nguyen",
+       x="River",
+       y="Length")
+```
