@@ -11,9 +11,10 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-Questions done: 15/15
 
-# ---- DATA and FUNCTIONS ----
+# Questions done: 15/15!
+
+## ᓚᘏᗢ … DATA and FUNCTIONS   .. ᘛ⁐̤ᕐᐷ 
 ```{r}
 library(Intro2R)
 library(ggplot2)
@@ -218,6 +219,10 @@ The module software code is most likely not going to be defective, but we can ex
 ## Question 11
 
 ### a
+
+![hand written histogram table thingy](histogram_table.jpeg){ width=70% }
+
+
 ```{r}
 old<-subset(volt,subset=LOCATION=="OLD")
 old$VOLTAGE->vto
@@ -236,6 +241,8 @@ barplot(old.relative.freq,space=0,main="Old Relative Frequency Barplot",las=2, y
 # histogram for old relative frequency
 hist(vto, prob=TRUE, nclass=10, xlab="Voltage", ylab="Relative Frequency", main="Old Relative Frequency Histogram")
 ```
+
+
 
 ### b
 ```{r}
@@ -269,11 +276,23 @@ No, the new process is not as good as the old process. Most of the readings in t
 
 ### e
 ```{r}
+
+# calculates average voltage in the old location
 mean(vto)
+
+# calculates middle voltage in the old location
 median(vto)
+
+# calculates most common voltage in the old location
 getmode(vto)
+
+# calculates average voltage in the new location
 mean(vtn)
+
+# calculates middle voltage in the new location
 median(vtn)
+
+# calculates most common voltage in the new location
 getmode(vtn)
 ```
 
