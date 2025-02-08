@@ -1,0 +1,275 @@
+---
+title: "lab4"
+author: "Tiffany Nguyen"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: yes
+    toc_float: yes
+    
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(Intro2R)
+dird="/Users/tiffanynguyen/Documents/College/Sophomore/Spring_2025/Applied_Statistical_Methods/MATH4753nguy0850/labs/lab4/DATAxls/"
+myread=function(csv){
+  fl=paste(dird,csv,sep="")
+  read.table(fl,header=TRUE,sep=",")
+}
+```
+
+# Task 1
+
+```{r}
+getwd()
+```
+
+# Task 2
+
+```{r}
+spruce.df=myread("SPRUCE.csv")
+tail(spruce)
+```
+
+# Task 3
+
+```{r}
+library(s20x)
+
+# lowess smoother scatter plot
+trendscatter(Height ~ BHDiameter, data = spruce.df, f = 0.5)
+
+# made linear model object
+spruce.lm = lm(Height~BHDiameter,data=spruce.df)
+
+#finding residuals and fitted values
+height.res = residuals(spruce.lm)
+height.fit = fitted(spruce.lm)
+
+# plot residuals vs fitted values
+plot(height.fit, height.res, 
+     xlab = "Fitted Values", 
+     ylab = "Residuals", 
+     main = "Residuals VS Fitted Values")
+abline(h = 0, col = "blue")
+
+# plot residuals vs fitted values using trendscatter
+trendscatter(height.fit, height.res, 
+             xlab = "Fitted Values", 
+             ylab = "Residuals", 
+             main = "Residuals VS Fitted Values")
+
+```
+
+The line created by the fitted and residual values created a parabolic shape, whereas the previous trendsetter function curve created a more linear shape.
+
+```{r}
+# residual plot  for spruce.lm
+plot(spruce.lm, which = 1)
+
+# check normality
+normcheck(spruce.lm, shapiro.wilk = TRUE)
+```
+
+The p-value for the Shapiro-Wilk's test is 0.29. In this case, the NULL hypothesis is that the residuals are normally distributed since 0.29 > 0.05.
+
+The residuals are normally distributed, and the residuals when plotted against the fitted values are unremarkable. The application of a straight line would be reasonable for this scenario.
+
+# Task 4
+
+```{r}
+
+# fitting quadratic to points
+quad.lm <- lm(Height ~ BHDiameter + I(BHDiameter^2), data = spruce.df)
+
+# scatter plot of Height vs BHDiameter with quadratic curve
+plot(spruce.df$BHDiameter, spruce.df$Height, 
+     xlab = "BHDiameter", 
+     ylab = "Height", 
+     main = "Height vs BHDiameter (Quadratic Curve)")
+
+BHDiameter_seq <- seq(min(spruce.df$BHDiameter), max(spruce.df$BHDiameter), length.out = 100)
+
+height_pred <- predict(quad.lm, newdata = data.frame(BHDiameter = BHDiameter_seq))
+lines(BHDiameter_seq, height_pred, col = "blue")
+
+# made vector of fitted values
+quad.fit <- fitted(quad.lm)
+
+# plot of residuals vs fitted values
+plot(quad.fit, residuals(quad.lm), 
+     xlab = "Fitted Values", 
+     ylab = "Residuals", 
+     main = "Residuals VS Fitted Values (Quadratic Curve)")
+abline(h = 0, col = "blue")
+
+# QQ plot using normcheck()
+normcheck(quad.lm, shapiro.wilk = TRUE)
+```
+
+The p-value in the Shapiro-Wilk test is 0.684. I conclude that applying the quadratic model to predict the height of the spruce trees is reasonable because residuals do not suggest a trend and the residuals are normally distributed (p-value > 0.05).
+
+# Task 5
+```{r}
+
+# summary of quad.lm
+summary(quad.lm)
+```
+
+\begin{eqnarray}
+
+\hat{\beta_0} &=& 0.860896 \\
+\hat{\beta_1} &=& 1.469592 \\
+\hat{\beta_2} &=& -0.027457 \\
+
+\end{eqnarray}
+
+```{r}
+
+# interval estimates for the b 
+confint(quad.lm)
+```
+
+Equation of the fitted line:
+\begin{eqnarray}
+\hat{y} &=& 0.86089580 + 1.46959217 x  - 0.02745726x^2
+\end{eqnarray}
+
+```{r}
+
+# predict Height of spruce 
+predict(quad.lm, pred = data.frame(BHDiameter = c(15, 18, 20)))
+
+```
+
+Compared to previous predictions, the newer prediction of the height of the spruce trees is more accurate. The quadratic model is more accurate than the linear model because the quadratic model fits the data better.
+
+
+\begin{eqnarray}
+Multiple R^2 &=& 0.7741 \\
+Adjusted R^2 &=& 0.7604 \\
+\end{eqnarray}
+
+
+```{r}
+
+# determine which R squared model is better
+linear.lm <- lm(Height ~ BHDiameter, data = spruce.df)
+anova(linear.lm, quad.lm)
+
+```
+
+In this case, the quadratic model has a higher R^2 and adjusted R^2 value compared to the lowess model, which explains the variability in the Height. According to ANOVA, the p-value (< 0.001) means the quadratic term was a significant improvement in terms of prediction compared to the linear model. Overall, the quadratic model is more appropriate for predicting the height of spruce trees.
+
+```{r}
+yhat=fitted(quad.lm)
+
+# TSS calculation
+TSS=with(spruce,sum((Height-mean(Height))^2))
+print(paste("TSS: ", TSS))
+
+# MSS calculation
+MSS=with(spruce,sum((yhat-mean(Height))^2))
+print(paste("MSS: ", MSS))
+
+# RSS calculation
+RSS=with(spruce,sum((Height-yhat)^2))
+print(paste("RSS: ", RSS))
+
+# MSS/TSS calculation
+print(paste("MSS/TSS (aka R^2): ", MSS/TSS))
+```
+
+# Task 6
+```{r}
+
+# cooks plot
+cooks20x(quad.lm, main="Cook's Distance Plot for quad.lm")
+```
+
+Cook's distance measures how much each data point influences the results of the regression analysis. This method of measurement also helps determine and identify outliers, or points that have a large effect on the estimation of the regression coefficients.
+
+```{r}
+
+cdist <- cooks.distance(quad.lm)
+which.max(cdist)
+```
+
+In this case, the cooks distance for the quadratic model and data tells me that the 24th data point has the most influence on the regression analysis.
+
+```{r}
+
+# same quadratic model after removing highest cooks distance
+spruce.df2 <- spruce.df[-24,]
+quad2.lm <- lm(Height ~ BHDiameter + I(BHDiameter^2), data = spruce.df2)
+
+summary(quad2.lm)
+summary(quad.lm)
+```
+
+This new model shows improvement: 
+
+* the new quadratic has a higher R^2 value (0.8159 > 0.7741), indicating a better overall fit for the model
+* the adjusted R^2 value is also higher, which means the quadratic model is more accurate after removing the highest cooks distance.
+* the residual standard error decreased (1.266 < 1.382), which means the new quadratic is more accurate with predictions
+
+Overall, the removal of the highest cook point improved the accuracy and representation of the relationship between spruce tree Height and BHDiameter.
+
+# Task 7
+
+Prove using latex that $y = \beta_0 +\beta_1 x + \beta_2 (x - x_k) I (x > x_k)$ where $I()$ is 1 when $x > x_k$ and 0 else.
+
+We have 2 lines with point $x_k$ in common
+$$ \ell_1 : y = \beta_0 + \beta_1 x $$
+$$ \ell_2 : y = \beta_0 + \beta_1 x + (\beta_1 + \beta_2)x$$
+Set the equations equal to one another to determine the value of $\delta$:
+$$y_k=\beta_0+\beta_1x_k=\beta_0+\delta+(\beta_1+\beta_2)x_k$$
+Distribute $x_k$:
+$$\beta_0+\beta_1x_k=\beta_0+\delta+\beta_1x_k+\beta_2x_k$$
+Divide both sides by $\beta_0$ and $\beta_1x$:
+$$0=\delta+\beta_2x_k$$
+So we get:
+$$\delta=-\beta_2x_k$$
+By determining $\delta$, we can now break down $\ell_2$:
+$$\ell_2:y=\beta_0+\delta+(\beta_1+\beta_2)x$$
+Substitute $\delta$ using the previous derived value:
+$$\beta_0-\beta_2x_k+(\beta_1+\beta_2)x$$
+Distribute $x$:
+$$\beta_0-\beta_2x_k+\beta_1x+\beta_2x$$
+Do some shuffling around:
+$$\beta_0+\beta_1x+\beta_2x-\beta_2x_k$$
+Do some factoring:
+$$\beta_0+\beta_1x+\beta_2(x-x_k)$$
+This leaves us with $\ell_2$ in terms of $\ell_1$.
+Therefore, 
+$$y=\beta_0+\beta_1x+\beta_2(x-x_k)I(x>x_k)$$
+This fulfills $I()$ being 1 if $x > x_k$ and 0 otherwise.
+
+```{r}
+
+#piecewise linear model 
+sp2.df = within(spruce, X <- (BHDiameter - 18) * (BHDiameter > 18)) # this makes a new variable and places it within the same df
+
+lmp = lm(Height ~ BHDiameter + X, data = sp2.df)
+tmp = summary(lmp)
+names(tmp)
+myf = function(x,coef) {
+  coef[1] + coef[2] * (x) + coef[3] * (x-18) * (x-18>0)
+}
+plot(spruce, main="Piecewise regression")
+myf(0, coef = tmp$coefficients[,"Estimate"])
+curve(myf(x, coef = tmp$coefficients[,"Estimate"]), add=TRUE, lwd=2, col="blue")
+abline(v=18)
+text(18, 16, paste("R squared =", round(tmp$r.squared, 4)))
+```
+
+# Task 8
+```{r}
+MATH4753nguy0850::myread("SPRUCE.csv", "/Users/tiffanynguyen/Documents/College/Sophomore/Spring_2025/Applied_Statistical_Methods/MATH4753nguy0850/labs/lab4/DATAxls/")
+```
+
+This function reads a csv file nice and prettily!
