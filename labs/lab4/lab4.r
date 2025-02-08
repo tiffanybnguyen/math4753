@@ -47,7 +47,7 @@ g = g + geom_smooth(formula = y~ poly(x,3), method ="lm", col = "green3")
 g
 
 
-
+# ------------ Task 3 ------------
 #load s20x library and make lowess smoother
 library(s20x)
 
@@ -76,6 +76,7 @@ windows()
 normcheck(spruce.lm,shapiro.wilk = TRUE)
 
 
+# ------------ Task 4 ------------
 ## Quadratic object using the linear model
 quad.lm=lm(Height~BHDiameter + I(BHDiameter^2),data=spruce.df)
 summary(quad.lm)
@@ -95,6 +96,8 @@ main="Spruce height prediction",data=spruce.df)
 coef(quad.lm)
 names(quad.lm)
 quad.lm$coef[2]
+
+
 
 myplot=function(x){
  0.86089580 +1.46959217*x  -0.02745726*x^2
