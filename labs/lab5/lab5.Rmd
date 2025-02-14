@@ -12,7 +12,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# --------- Libraries ---------
+# --------- LIBRARIES & FUNCTIONS ---------
 ```{r}
 library(Intro2R)
 library(dplyr)
