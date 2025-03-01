@@ -1,0 +1,242 @@
+---
+title: "lab6"
+author: "Tiffany Nguyen"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Task 1
+
+```{r}
+getwd()
+```
+
+# Task 2
+
+```{r}
+# creates the layout
+layout(matrix(1:4, nr=2,nc=2))
+
+# creates the curves 
+curve(dnorm(x, mean=10,sd=4),xlim=c(-5,25))
+curve(dnorm(x, mean=10,sd=8),xlim=c(-15,35))
+curve(dnorm(x, mean=5,sd=4),xlim=c(-10,20))
+curve(dnorm(x, mean=10,sd=2),xlim=c(2.5,17.5))
+
+# plotting regions and probabilities
+par(mfrow=c(1,1))
+
+# Y >= 2
+curve(dnorm(x, mean=0, sd=1), xlim=c(-3,3))
+xcurve = seq(2, 4, length=1000)
+ycurve = dnorm(xcurve, mean=0, sd=1)
+polygon(x=c(2,xcurve,4),y=c(0,ycurve,0),col="green")
+round(1 - pnorm(2, mean=0, sd=1), 4)
+
+# 1 <= Y < 5
+curve(dnorm(x, mean=4, sd=2), xlim = c(-2, 10))
+xcurve = seq(1, 5, length=1000)
+ycurve = dnorm(xcurve, mean=4, sd=2)
+polygon(x=c(1,xcurve,5),y=c(0,ycurve,0),col="green")
+round(pnorm(5, mean=4, sd=2) - pnorm(1, mean=4, sd=2), 4)
+
+# Y < 10
+curve(dnorm(x, mean=10, sd=4), xlim=c(-2,22))
+xcurve = seq(-3, 10, length=1000)
+ycurve = dnorm(xcurve, mean=10, sd=4)
+polygon(x=c(-3,xcurve,10),y=c(0,ycurve,0),col="green")
+round(pnorm(10, mean=10, sd=4), 4)
+
+# -3 <= Y <= -2
+curve(dnorm(x, mean=-2, sd=0.5), xlim=c(-4,0))
+xcurve = seq(-3, -2, length=1000)
+ycurve = dnorm(xcurve, mean=-2, sd=0.5)
+polygon(x=c(-3,xcurve,-2),y=c(0,ycurve,0),col="green")
+round(pnorm(-2, mean=-2, sd=0.5) - pnorm(-3, mean=-2, sd=0.5), 4)
+```
+
+# Task 3
+
+```{r}
+x <- seq(0, 15, 0.1)
+# gamma plotting surface
+plot(x, dgamma(x, shape=1, scale=1), type="l", col="green", xlab="x", ylab="Gamma Density")
+lines(x, dgamma(x, shape=3, scale=1), col="blue")
+lines(x, dgamma(x, shape=5, scale=1), col="red")
+legend("topright", legend=c("shape=1", "shape=3", "shape=5"), col=c("green", "blue", "red"), lty=1)
+
+# plotting regions and probabilities
+# P(2 < Y < 5)
+plot(x, dgamma(x, shape=3, scale=2), type="l", col="green", xlab="x", ylab="Gamma Density", main="Shape 3, Scale 2")
+xcurve = seq(2, 5, length=1000)
+ycurve = dgamma(xcurve, shape=3, scale=2)
+polygon(x=c(2,xcurve,5),y=c(0,ycurve,0),col="green")
+round(pgamma(5, shape=3, scale=2) - pgamma(2, shape=3,scale=2), 4)
+
+# P(1 <= Y <= 4)
+plot(x, dgamma(x, shape=6, scale=3), type="l", col="green", xlab="x", ylab="Gamma Density", main="Shape 6, Scale 3")
+xcurve = seq(1, 4, length=1000)
+ycurve = dgamma(xcurve, shape=6, scale=3)
+polygon(x=c(1,xcurve,4),y=c(0,ycurve,0),col="green")
+round(pgamma(4, shape=6, scale=3) - pgamma(1, shape=6, scale=3), 4)
+
+# P(3 <= Y < 6)
+plot(x, dgamma(x, shape=2, scale=4), type="l", col="green", xlab="x", ylab="Gamma Density", main="Shape 2, Scale 4")
+xcurve = seq(3, 6, length=1000)
+ycurve = dgamma(xcurve, shape=2, scale=4)
+polygon(x=c(3,xcurve,6),y=c(0,ycurve,0),col="green")
+round(pgamma(6, shape=2, scale=4) - pgamma(3, shape=2, scale=4), 4)
+```
+
+# Task 4
+
+```{r}
+
+# creates the layout
+layout(matrix(1:4, nr=2,nc=2))
+
+# creates the curves
+curve(dchisq(x,df=1),xlim=c(0,10),ylim=c(0,1),col="Red",lwd=2,
+      ylab="Chisq density", main="df=1")
+curve(dchisq(x,df=2),xlim=c(0,10),ylim=c(0,1),col="Red",lwd=2,
+      ylab="Chisq density", main="df=2")
+curve(dchisq(x,df=4),xlim=c(0,10),ylim=c(0,1),col="Red",lwd=2,
+      ylab="Chisq density", main="df=4")
+curve(dchisq(x,df=20),xlim=c(0,10),ylim=c(0,1),col="Red",lwd=2,
+      ylab="Chisq density", main="df=20")
+
+# plotting regions and probabilities
+par(mfrow=c(1,1))
+
+# P(2<= Y <=4)
+curve(dchisq(x,df=2),xlim=c(0,10),ylim=c(0,1),col="black",lwd=2,
+      ylab="Chisq density", main="df=2")
+xcurve = seq(2, 4, length=1000)
+ycurve = dchisq(xcurve, df=2)
+polygon(x=c(2,xcurve,4),y=c(0,ycurve,0),col="lightblue")
+round(pchisq(4, df=2) - pchisq(2, df=2), 4)
+
+# P(3 <= Y <= 5)
+curve(dchisq(x,df=3),xlim=c(0,10),ylim=c(0,1),col="black",lwd=2,
+      ylab="Chisq density", main="df=3")
+xcurve = seq(3, 5, length=1000)
+ycurve = dchisq(xcurve, df=3)
+polygon(x=c(3,xcurve,5),y=c(0,ycurve,0),col="lightblue")
+round(pchisq(5, df=3) - pchisq(3, df=3), 4)
+
+# P(10 < Y <= 21)
+curve(dchisq(x,df=20),xlim=c(0,30),ylim=c(0,1),col="black",lwd=2,
+      ylab="Chisq density", main="df=20")
+xcurve = seq(10, 21, length=1000)
+ycurve = dchisq(xcurve, df=20)
+polygon(x=c(10,xcurve,21),y=c(0,ycurve,0),col="lightblue")
+round(pchisq(21, df=20) - pchisq(10, df=20), 4)
+```
+
+# Task 5
+
+```{r}
+
+# creates the layout
+layout(matrix(1:4, nr=2,nc=2))
+
+# fun weibull curves
+
+# 1
+curve(dweibull(x, shape=3,scale=2), xlim=c(0,4), lwd=2, ylab="Weibull Density", main="Shape = 3, Scale = 2")
+
+# 2
+curve(dweibull(x, shape=10,scale=1), xlim=c(0.5,1.5), lwd=2, ylab="Weibull Density", main="Shape = 10, Scale = 1")
+
+# 3
+curve(dweibull(x, shape=1,scale=10), xlim=c(0,5), lwd=2, ylab="Weibull Density", main="Shape = 1, Scale = 10")
+
+# 4
+curve(dweibull(x, shape=5,scale=7), xlim=c(0,13), lwd=2, ylab="Weibull Density", main="Shape = 5, Scale = 7")
+
+# fun regions probabilities for three weibull functions
+par(mfrow=c(1,1))
+
+# 1
+curve(dweibull(x, shape=3,scale=2), xlim=c(0,5), lwd=2, ylab="Weibull Density", main="Shape = 3, Scale = 2")
+xcurve = seq(2, 5, length=1000)
+ycurve = dweibull(xcurve, shape=3, scale=2)
+polygon(x=c(2,xcurve,5),y=c(0,ycurve,0),col="lightblue")
+# P(2 <= Y <= 5)
+round(pweibull(5, shape=3, scale=2) - pweibull(2, shape=3,scale=2), 4)
+
+# 2
+curve(dweibull(x, shape=10,scale=1), xlim=c(0.5,1.5), lwd=2, ylab="Weibull Density", main="Shape = 10, Scale = 1")
+xcurve = seq(0.5, 1, length=1000)
+ycurve = dweibull(xcurve, shape=10, scale=1)
+polygon(x=c(0.5,xcurve,1),y=c(0,ycurve,0),col="lightblue")
+# P(0.5 <= Y <= 1)
+round(pweibull(1, shape=10, scale=1) - pweibull(0.5, shape=10, scale=1), 4)
+
+# 3
+curve(dweibull(x, shape=1,scale=10), xlim=c(0,5), lwd=2, ylab="Weibull Density", main="Shape = 1, Scale = 10")
+xcurve = seq(2, 5, length=1000)
+ycurve = dweibull(xcurve, shape=1, scale=10)
+polygon(x=c(2,xcurve,5),y=c(0,ycurve,0),col="lightblue")
+# P(Y < 3)
+round(pweibull(3, shape=1, scale=10), 4)
+
+```
+
+# Task 6
+
+```{r}
+
+# creates the layout
+layout(matrix(1:4, nr=2,nc=2))
+
+# fun beta curves
+# 1
+curve(dbeta(x, shape1=1,shape2=2), lwd=2, ylab="Beta Density", main="Shape1=1,Shape2=2")
+# 2
+curve(dbeta(x, shape1=2,shape2=1), lwd=2, ylab="Beta Density", main="Shape1=2,Shape2=1")
+# 3
+curve(dbeta(x, shape1=10,shape2=1), lwd=2, ylab="Beta Density", main="Shape1=10,Shape2=1")
+# 4
+curve(dbeta(x, shape1=100,shape2=1), lwd=2, ylab="Beta Density", main="Shape1=100,Shape2=1")
+
+# fun regions probabilities for three beta functions
+par(mfrow=c(1,1))
+
+# 1
+curve(dbeta(x, shape1=1,shape2=2), lwd=2, ylab="Beta Density", main="Shape1=1,Shape2=2")
+xcurve = seq(0.2, 0.5, length=1000)
+ycurve = dbeta(xcurve, shape1=1, shape2=2)
+polygon(x=c(0.2,xcurve,0.5),y=c(0,ycurve,0),col="lightblue")
+# P(0.2 <= Y <= 0.5)
+round(pbeta(0.5, shape1=1, shape2=2) - pbeta(0.2, shape1=1, shape2=2), 4)
+
+# 2
+curve(dbeta(x, shape1=2,shape2=1), lwd=2, ylab="Beta Density", main="Shape1=2,Shape2=1")
+xcurve = seq(0.2, 0.5, length=1000)
+ycurve = dbeta(xcurve, shape1=2, shape2=1)
+polygon(x=c(0.2,xcurve,0.5),y=c(0,ycurve,0),col="lightblue")
+# P(0.2 <= Y <= 0.5)
+round(pbeta(0.5, shape1=2, shape2=1) - pbeta(0.2, shape1=2, shape2=1), 4)
+
+# 3
+curve(dbeta(x, shape1=10,shape2=1), lwd=2, ylab="Beta Density", main="Shape1=10,Shape2=1")
+xcurve = seq(0.8, 0.9, length=1000)
+ycurve = dbeta(xcurve, shape1=10, shape2=1)
+polygon(x=c(0.8,xcurve,0.9),y=c(0,ycurve,0),col="lightblue")
+# P(0.1 <= Y <= 0.2)
+round(pbeta(0.9, shape1=10, shape2=1) - pbeta(0.1, shape1=10, shape2=1), 4)
+
+```
+
+# Task 7
+
+```{r}
+devtools::load_all(".")
+MATH4753nguy0850::myncurve(10, 5, 6)
+
+```
