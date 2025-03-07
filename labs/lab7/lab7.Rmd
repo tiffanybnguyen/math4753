@@ -16,6 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 
+library(MATH4753nguy0850)
 mychisim<-function(n1=10,sigma1=3,mean1=5,iter=1000,ymax=0.1,...){    # adjust ymax to make graph fit
   
   y1=rnorm(n1*iter,mean=mean1,sd=sigma1)# generate iter samples of size n1
@@ -254,13 +255,6 @@ hist(f2$w,
 
 ```{r}
 library(MATH4753nguy0850)
-library(usethis)
-
-fire <- MATH4753nguy0850::myread("FIREDAM.csv", "/Users/tiffanynguyen/Documents/College/Sophomore/Spring_2025/Applied_Statistical_Methods/MATH4753nguy0850/labs/lab7/")
-
-setwd("~/Documents/College/Sophomore/Spring_2025/Applied_Statistical_Methods/MATH4753nguy0850/")
-getwd()
-usethis::use_data(fire, overwrite = TRUE)
 data("fire")
 knitr::kable(head(fire))
 ```
