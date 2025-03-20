@@ -264,8 +264,7 @@ F(0.4) = \frac{2}{3}(2(0.4)-\frac{1}{2}(0.4)^2) = 0.48
 $$
 d.
 $$
-P(0.1 \le Y \le 0.6) = F(0.6) - F(0.1) \newline
-
+P(0.1\le Y\le 0.6) = F(0.6) - F(0.1) \newline
 \frac{2}{3}(2(0.6)-\frac{1}{2}(0.6)^2) - \frac{2}{3}(2(0.1)-\frac{1}{2}(0.1)^2) \newline
 0.68 - 0.13 = 0.55
 $$
@@ -274,18 +273,85 @@ $$
 
 a.
 $$
-\mu=E(Y)\int_{-5}^{5}\frac{3}{500}(25-y^2)dy \newline
-=\frac{3}{500}(\int_{-5}^{5}25dy - \int_{-5}^{5}y^2dy) \newline
-=\frac{3}{500}(25(5+5) - \frac{1}{3}(5^3-(-5)^3)) \newline
-=\frac{3}{500}(250 - \frac{1}{3}(125-(-125))) \newline
-=\frac{3}{500}(250 - \frac{1}{3}(250)) \newline
-=\frac{3}{500}\frac{500}{3} \newline
-\mu=1
+\mu=E(Y)\int_{-5}^{5}\frac{3y}{500}(25-y^2)dy \newline
+=\int_{-5}^{5}(\frac{3y}{20}-\frac{3y^3}{500})dy =(\frac{3y^2}{40}-\frac{3y^4}{2000})|_{-5}^{5} \newline
+= (\frac{3(5)^2}{40}-\frac{3(5)^4}{2000})-(\frac{3(-5)^2}{40}-\frac{3(-5)^4}{2000}) \newline\
+=(1.875-0.9375)-(1.875-0.9375) = 0
+$$
+$$
+E(Y^2)=\int_{-5}^{5}y^2\frac{3y^2}{500}(25-y^2)dy \newline
+=\int_{-5}^{5}(\frac{3y^2}{20}-\frac{3y^4}{500})dy \newline
+=\frac{y^3}{20}-\frac{3y^5}{2500}|_{-5}^{5} \newline
+= (\frac{(5)^3}{20}-\frac{3(5)^5}{2500})-(\frac{(-5)^3}{20}-\frac{3(-5)^5}{2500}) \newline
+=(6.25-3.75)-(-6.25+3.75)=5 \newline
+\sigma^2=E(Y^2)-\mu^2=5-0^2=5
+$$
+b. 
+$$
+\text {Let }X=\frac{1}{60}Y. \text { Then } \mu_x=E(X)=E(\frac{1}{60}Y)=\frac{1}{60}E(Y)=\frac{1}{60}(0)=0 \newline
+\sigma_x^2=\sigma_{1/60Y}^2=(\frac{1}{60})^2\sigma_Y^2=\frac{1}{3600}(5)=0.0014
 $$
 
+c.
+$$
+\text {Let }Z=60Y. \text { Then }\mu_z=E(Z)=E(60Y)=60E(Y)=60(0)=0 \newline
+\sigma_z^2=\sigma_{60Y}^2=(60)^2\sigma_Y^2=3600(5)=18,000
+$$
 
 ## Q 16
 
+a. 94%
+```{r}
+# mean of 50 mg per liter, sd of 3.2 mg per liter
+# P(Y>45)
+1 - pnorm(45, 50, 3.2)
+```
 
+b. 94%
+```{r}
+# P(Y<55)
+pnorm(55, 50, 3.2)
+```
+
+c. 11%
+```{r}
+# P(51<Y<52)
+pnorm(52, 50, 3.2) - pnorm(51, 50, 3.2)
+```
 
 ## Q 17
+
+a. 41%
+```{r}
+# mean of 605 points, sd of 185 points
+# P(500<y<700)
+pnorm(700, 605, 185) - pnorm(500, 605, 185)
+```
+
+b. 15%
+```{r}
+# P(400<Y<500)
+pnorm(500, 605, 185) - pnorm(400, 605, 185)
+```
+
+c. 91%
+```{r}
+# P(Y<850)
+pnorm(850, 605, 185)
+```
+
+d. 2%
+```{r}
+# P(Y>1000)
+1 - pnorm(1000, 605, 185)
+```
+
+e. 842 points
+```{r}
+# what rating will only 10% of the crash-tested cars exceed?
+qnorm(0.9, 605, 185)
+```
+
+
+
+
