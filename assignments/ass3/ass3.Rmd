@@ -85,14 +85,394 @@ c.
 For A:
 
 $$
-P(Y<1)=\int_0^1 \frac{y^{2-1}e^{-y/2}}{2^2\Gamma(2)}dy = \int_0^1 \frac{ye^{-y/2}}{4}dy = \frac{1}{4} \int_0^1 2e^{-y/2}dy + \frac{1}{4} [-2e^{-y/2}\right]_0^1 \newline
-$$
-
-$$
-= \frac{1}{4} \left[-2e^{-1/2} + 2(0)e^{0}\right] = \frac{1}{4} \left[-2e^{-1/2}(3) + 4\right] = \frac{1}{4} \left[-6e^{-1/2} + 4\right] = \frac{1}{4} \left[-6(0.6065306597) + 4\right] = \frac{1}{4} \left[-3.6391839582 + 4\right] = \frac{1}{4} \left[0.3608160418\right] = 0.09020401045
-
+P(Y<1)=\int_0^1 \frac{y^{2-1}e^{-y/2}}{2^2\Gamma(2)}dy = \int_0^1 \frac{ye^{-y/2}}{4}dy = \frac{1}{4} \int_0^1 2e^{-y/2}dy + \frac{1}{4} (-2e^{-y/2})|_0^1 \newline
+= \frac{1}{4} \left[-2e^{-1/2} + 2(0)e^{0}\right] = \frac{1}{4} \left[-2e^{-1/2}(3) + 4\right] = 0.09020401045
 $$
 
 For B:
+
+$$
+P(Y<1)=\int_0^1 \frac{y^{1-1}e^{-y/4}}{4^1\Gamma(1)}dy = \int_0^1 \frac{ye^{-y/4}}{4}dy = \frac{1}{4} \int_0^1 4e^{-y/4}dy + \frac{1}{4} (-4e^{-y/4})|_0^1 \newline
+= \frac{1}{4} \left[-4e^{-1/4} + 4(0)e^{0}\right] = \frac{1}{4} \left[-4e^{-1/4}(1) + 4\right] = 0.2211992169286
+$$
+
+Tear gas Formula B has a higher probability (0.2211 > 0.0902) of generating a human reaction in less than 1 minute. The probability of Formula B is higher than the probability of Formula A.
+
+## Q 4 5.74 pg 219
+
+a. about 0.6321
+
+Using CDF for Weibull distribution :D
+$$
+F(y_0) = \int_{0}^{y_0}f(y)dy = \int_{0}^{y_0}\frac{\alpha}{\beta}y^{\alpha-1}e^{-y^{\alpha}/ \beta}dy = 1-e^{-z/\beta} = 1-e^{-y_{0}^{a}/ \beta} \newline
+P(Y<2) = 1-e^{-2^{2}/4} = 1-e^{-1} = 0.6321205588
+$$
+
+b. mean = 1.7724, sd = 0.9264
+
+mean & standard deviation
+$$
+\mu = \beta^{1/\alpha}\Gamma(\frac{\alpha+1}{\alpha}) = (4)^{1/2}(\Gamma(\frac{2+1}{2})) = 2\Gamma(1.5) = 1.7724538509 \newline
+\sigma^2=\beta^{2/\alpha}\left[\Gamma(\frac{\alpha+2}{\alpha})-\Gamma^{2}(\frac{\alpha+1}{\alpha})\right] = (4)^{2/2}\left[\Gamma(2)-\Gamma^{2}(1.5) \right] = (4)(1-(.88623)^{2}) = 0.9264909866803887
+$$
+
+c.
+$$
+P(\mu-2\sigma \le Y \le \mu+2\sigma) = P(1.7724-2(0.9264) \le Y \le 1.7724+2(0.9264)) = P(-0.0804 \le Y \le 3.6712) \newline
+$$
+
+d. No, the probability is 0.1053, or about 11%
+
+$$
+F(y_0) = \int_{0}^{y_0}f(y)dy = \int_{0}^{y_0}\frac{\alpha}{\beta}y^{\alpha-1}e^{-y^{\alpha}/\beta}dy = 1-e^{-(y/\beta)^{\alpha}} \newline
+P(Y>6) = 1 - F(6) = 1 - (1-e^{-(6/4)^{2}}) = e^{-9/4} = 0.10539922456186433
+
+$$
+
+## Q 5 5.84 pg 223
+
+a. mean = 0.1818, variance = 0.0123
+
+$$
+\mu = \frac{\alpha}{\alpha+\beta} = \frac{2}{2+9} = \frac{2}{11} = 0.18181818 \newline
+\sigma^{2}=\frac{\alpha\beta}{(\alpha+\beta)^{2}(\alpha+\beta+1)} = \frac{2(9)}{(2+9)^{2}(2+9+1)} = \frac{18}{1452} = 0.01239669421
+$$
+
+b. 0.04636 or 4%
+
+$$
+PDF: f(y)=\frac{y^{\alpha-1}(1-y)^{\beta-1}}{B(\alpha, \beta)} = \frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}y^{\alpha-1}(1-y)^{\beta-1}, 0 \le y \le 1 \newline
+\alpha=2,\beta=9: f(y)=\frac{ \Gamma(2+9) }{ \Gamma(2)\Gamma(9) }y^{2-1}(1-y)^{9-1} = \frac{ \Gamma(11) }{ \Gamma(2)\Gamma(9) }y^{1}(1-y)^{8} = \frac{(10!)y(1-y)^{8}}{(1!)(8!)} = 90y(1-y)^{8} \newline
+P(Y>0.40) = \int_{0.40}^{1}90y(1-y)^{8}dy = \int_{u=0.6}^{0}90(1-u)u^{8}(-du) = 90\int_{0}^{0.6}(u^{8}-u^{9})du=90\left[\frac{u^{9}}{9} - \frac{u^{10}}{10} \right]_{0}^{0.6} = 90(\frac{0.6^{9}}{9} - \frac{0.6^{10}}{10}) = 0.04636
+$$
+
+c. 0.2639 or 26%
+
+$$
+n=(\alpha+\beta-1)=2+9-1=10,p=0.10; P(Y \le 10) = F(0.10) \newline
+F(p)=\int_{0}^{p}\frac{y^{\alpha-1}(1-y)^{\beta-1}}{B(\alpha, \beta)}dy = \sum_{y=\alpha}^{n}p(y) \newline
+F(0.10)=\sum_{y=2}^{10}p(y) = 1-\sum_{y=0}^{1}p(y) = 1 - 0.7361 = 0.2639
+$$
+
+
+## Q 6 5.114 pg 232
+
+a. alpha = 2, beta = 16 (2/16 is 1/8 yay)
+
+b. mean = 3.5449, variance = 3.4335
+
+$$
+\mu=\beta^{1/\alpha}\Gamma(\frac{\alpha+1}{\alpha}) = 16^{1/2}\Gamma(\frac{3}{2}) = (4)\Gamma(1.5) = (4)(0.88623) = 3.54492 \newline
+\sigma^{2}=\beta^{2/\alpha}\left[\Gamma(\frac{\alpha+2}{\alpha}) - \Gamma^{2}(\frac{\alpha+1}{\alpha}) \right] = 16^{2/2}\left[ \Gamma(\frac{2+2}{2})-\Gamma^{2}(\frac{2+1}{2}) \right] = (16)\left[\Gamma(2)-\Gamma^{2}(1.5)\right] = (16)(1-(0.88623)^{2}) = 3.433542194
+$$
+
+c. 0.1054 or 10%
+
+$$
+P(Y \ge 6) = 1 - P(Y<6) = 1-F(6) \newline
+F(y_0) = \int_{0}^{y_0}f(y)dy = \int_{0}^{y_0}\frac{\alpha}{\beta}y^{\alpha-1}e^{-y^{\alpha}/\beta}dy \rightarrow F(6) = \int_{0}^{6}\frac{2}{16}y^{2-1}e^{-y^{2}/16}dy = \frac{1}{8}\int_{0}^{6}ye^{-y^{2}/16}dy = \frac{1}{8}\left[-8e^{-y^{2}/16}\right]_{0}^{6} = \frac{1}{8}\left[-8e^{-36/16}+8e^{0}\right] = \frac{1}{8}\left[8(1-e^{-9/4})\right] = 1-e^{-9/4} = 0.1054
+$$
+
+
+## Q 7 6.2 pg 239
+
+a. We know 1 $\le$ X $\le$ 6 and 1 $\le$ Y $\le$ 6 also 36 outcomes is equally likely. Then the joint probability distribution is:
+
+$$
+p(x,y) = \frac{1}{36} \text{ for all } x,y \in \{1, 2, 3, 4, 5, 6\}
+$$
+
+b. Since both dice are independent, the marginal distribution for both are the same: $\frac{1}{6}$
+
+$$
+p_{1}(x)=\sum_{y=1}^{6}p(x,y) = \sum_{y=1}^{6}\frac{1}{36} = \frac{6}{36} = \frac{1}{6} \newline
+p_{2}(x)=\sum_{y=1}^{6}p(x,y) = \sum_{y=1}^{6}\frac{1}{36} = \frac{6}{36} = \frac{1}{6} \newline
+$$
+
+c.Since both dice are independent, the conditional probability distribution for both are the same: $\frac{1}{6}$
+
+$$
+p_{1}(x,y)=\frac{p(x,y)}{p_2(y)} = \frac{\frac{1}{36}}{\frac{1}{6}} = \frac{1}{6} \newline
+p_{2}(x,y)=\frac{p(x,y)}{p_1(x)} = \frac{\frac{1}{36}}{\frac{1}{6}} = \frac{1}{6} \newline
+$$
+
+d. Since the conditional probability for both $p_{1}(x,y)$ and $p_{2}(x,y)$ are equal to the joint probability distribution, $\frac{1}{36}$, the outcomes of the two dice are therefore statistically independent. 
+
+
+## Q 8 6.4 pg 240
+
+a.
+
+$$
+x=1,y=1 \rightarrow ID=2 \rightarrow p(1,1)=\frac{1}{7} \newline
+x=1,y=2 \rightarrow ID=N/A \rightarrow p(1,2)=0 \newline
+x=1,y=3 \rightarrow ID=N/A \rightarrow p(1,2)=0 \newline
+x=2,y=1 \rightarrow ID=4,7 \rightarrow p(2,1)=\frac{2}{7} \newline
+x=2,y=2 \rightarrow ID=N/A \rightarrow p(2,2)=0 \newline
+x=2,y=3 \rightarrow ID=N/A \rightarrow p(2,3)=0 \newline
+x=3,y=1 \rightarrow ID=1 \rightarrow p(3,1)=\frac{1}{7} \newline
+x=3,y=2 \rightarrow ID=5,6 \rightarrow p(3,2)=\frac{2}{7} \newline
+x=3,y=3 \rightarrow ID=3 \rightarrow p(3,3)=\frac{1}{7} \newline
+$$
+
+b.
+
+$$
+p_1(x)=\sum_{y}p(x,y) \newline
+p_1(1)=\frac{1}{7}+0+0=\frac{1}{7} \newline
+p_1(2)=0+0+\frac{2}{7}=\frac{2}{7} \newline
+p_1(3)=\frac{1}{7}+\frac{2}{7}+\frac{1}{7}=\frac{4}{7} \newline
+$$
+c.
+
+$$
+p_2(y)=\sum_{x}p(x,y) \newline
+p_2(1)=\frac{1}{7}+\frac{2}{7}+\frac{1}{7}=\frac{4}{7} \newline
+p_2(2)=0+0+\frac{2}{7}=\frac{2}{7} \newline
+p_2(3)=0+0+\frac{1}{7}=\frac{1}{7} \newline
+$$
+
+d. conditional distribution
+
+$$
+p_{2}(y|x)=\frac{p(x,y)}{p_{1}(x)} \newline
+p_{2}(1|1)=\frac{p(1,1)}{p_{1}(1)}=\frac{\frac{1}{7}}{\frac{1}{7}}=1 \newline
+p_{2}(2|1)=\frac{p(1,2)}{p_{1}(1)}=\frac{0}{\frac{1}{7}}=0 \newline
+p_{2}(3|1)=\frac{p(1,3)}{p_{1}(1)}=\frac{0}{\frac{1}{7}}=0 \newline
+p_{2}(1|2)=\frac{p(2,1)}{p_{1}(2)}=\frac{\frac{2}{7}}{\frac{2}{7}}=1 \newline
+p_{2}(2|2)=\frac{p(2,2)}{p_{1}(2)}=\frac{0}{\frac{2}{7}}=0 \newline
+p_{2}(3|2)=\frac{p(2,3)}{p_{1}(2)}=\frac{0}{\frac{2}{7}}=0 \newline
+p_{2}(1|3)=\frac{p(3,1)}{p_{1}(3)}=\frac{\frac{1}{7}}{\frac{4}{7}}=\frac{1}{4} \newline
+p_{2}(2|3)=\frac{p(3,2)}{p_{1}(3)}=\frac{\frac{2}{7}}{\frac{4}{7}}=\frac{2}{4} \newline
+p_{2}(3|3)=\frac{p(3,3)}{p_{1}(3)}=\frac{\frac{1}{7}}{\frac{4}{7}}=\frac{1}{4} \newline
+$$
+
+
+## Q 9 6.12 pg 244
+
+a.
+
+$$
+\text{probability density of X and Y: }f(x,y)=\frac{e^{-y/10}}{10y}, 0<y<x<2y \newline
+f(y)=\int_{y}^{2y}\frac{e^{-y/10}}{10y}dx = \frac{e^{-y/10}}{10y}(2y-y)=\frac{e^{-y/10}}{10y}y=\frac{e^{-y/10}}{10} \text{ or } \frac{1}{10}e^{-y/10} \newline
+$$
+This is the exponential distribution, where $\lambda=\frac{1}{10}$.
+
+b. The mean DOT estimate $E(Y)=\mu=\beta=10$ (thousands of dollhairs)
+
+$$
+E(Y)=\frac{1}{\lambda}=\frac{1}{\frac{1}{10}}=10 
+$$
+
+## Q 10 6.14 pg 245
+
+a. solving for c
+
+$$
+\text{initial setup: } \int_{-\infty}^{\infty}\int_{-\infty}^{\infty}f(x,y)dxdy = \int_{0}^{x}\int_{0}^{\infty}ce^{-x^{2}}dydx \newline
+\text{inner integral: } \rightarrow \int_{0}^{x}ce^{-x^{2}}dy = ce^{-x{2}}(x) \newline
+\text{plug into outer integral} \rightarrow \int_{0}^{\infty}cxe^{-x^{2}}dx = \int_{0}^{\infty}xe^{-x^{2}}dx=\frac{1}{2}\int_{0}^{\infty}e^{-u}du=\frac{1}{2} \newline
+\text{solve for c: } \rightarrow \frac{c}{2} = 1 \rightarrow c=2 \newline
+$$
+
+b. marginal density
+
+$$
+\int_{-\infty}^{\infty}f_{1}(x)dx=2\int_{0}^{1}xdx=2\Big( \frac{x^{2}}{2} \Big)\Big]_{0}^{1}=1 \newline
+$$
+
+c. conditional density for Y given X is a uniform distribution over the interval 0 $\le$ Y $\le$ X
+
+$$
+f_{2}(y|x)=\frac{f(x,y)}{f_1(x)}=\frac{2e^{-x^{2}}}{2xe^{-x^{2}}}=\frac{1}{x}
+$$
+
+## Q 11 6.51 pg 253
+
+$$
+Cov(X,Y)=E(XY)-E(X)E(Y) = \sum_{x}\sum_{y}xyp(x,y) \newline
+$$
+
+Marginal distribution of X
+
+$$
+p_{1}(-1)=\frac{1}{12}+\frac{2}{12}+\frac{1}{12}=\frac{4}{12} \newline
+p_{1}(0)=\frac{2}{12}+0+\frac{2}{12}=\frac{4}{12} \newline
+p_{1}(1)=\frac{1}{12}+\frac{2}{12}+\frac{1}{12}=\frac{4}{12} \newline
+E(X)=\sum_{x}xp(x) = (-1)\Big(\frac{4}{12}\Big)+(0)\Big(\frac{4}{12}\Big)+(1)\Big(\frac{4}{12}\Big) = -\frac{4}{12}+\frac{4}{12} = 0
+$$
+
+Marginal distribution of Y
+
+$$
+p_{1}(-1)=\frac{1}{12}+\frac{2}{12}+\frac{1}{12}=\frac{4}{12} \newline
+p_{1}(0)=\frac{2}{12}+0+\frac{2}{12}=\frac{4}{12} \newline
+p_{1}(1)=\frac{1}{12}+\frac{2}{12}+\frac{1}{12}=\frac{4}{12} \newline
+E(Y)=\sum_{y}yp(y) = (-1)\Big(\frac{4}{12}\Big)+(0)\Big(\frac{4}{12}\Big)+(1)\Big(\frac{4}{12}\Big) = -\frac{4}{12}+\frac{4}{12} = 0
+$$
+
+Calculate E[XY]
+
+$$
+E[XY]=\sum_{x}\sum_{y}xyp(x,y) \newline
+x=-1, y=-1 \rightarrow (-1)(-1)\Big(\frac{1}{12}\Big) = \frac{1}{12} \newline
+x=-1, y=0 \rightarrow (-1)(0)\Big(\frac{2}{12}\Big) = 0 \newline
+x=-1, y=1 \rightarrow (-1)(1)\Big(\frac{1}{12}\Big) = -\frac{1}{12} \newline
+x=0, y=-1 \rightarrow (0)(-1)\Big(\frac{2}{12}\Big) = 0 \newline
+x=0, y=0 \rightarrow (0)(0)\Big(0\Big) = 0 \newline
+x=0, y=1 \rightarrow (0)(1)\Big(\frac{2}{12}\Big) = 0 \newline
+x=1, y=-1 \rightarrow (1)(-1)\Big(\frac{1}{12}\Big) = -\frac{1}{12} \newline
+x=1, y=0 \rightarrow (1)(0)\Big(\frac{2}{12}\Big) = 0 \newline
+x=1, y=1 \rightarrow (1)(1)\Big(\frac{1}{12}\Big) = \frac{1}{12} \newline
+E[XY] = \frac{1}{12} + 0 - \frac{1}{12} + 0 + 0 + 0 - \frac{1}{12} + 0 + \frac{1}{12} = 0
+$$
+
+Calculate Covariance:
+
+$$
+Cov(X,Y)=E(XY)-E(X)E(Y) = 0 - (0)(0) = 0
+$$
+
+Show that X and Y are dependent:
+
+$$
+p(x,y)\neq p_{1}(x)p_{2}(y) \newline
+\text{check any pair (x=0, y=0 for example): } p(0,0)=0 \neq p_{1}(0)p_{2}(0) = \Big(\frac{4}{12}\Big)\Big(\frac{4}{12}\Big) = \frac{16}{144} \neq 0 \newline
+\text{WRONGGGGG...yeah X and Y are dependent}
+$$
+
+We have shown that X and Y are dependent, and that Cov(X,Y)=0. :3
+
+
+## Q 12 6.74 pg 269
+
+a.
+
+$$
+E(\bar{Y})=\mu = \frac{1+3}{2} = 2
+$$
+
+b.
+
+$$
+Var(\bar{Y})=\frac{(3-1)^{2}}{12 * 60} = 0.005555555
+$$
+
+c. The central limit theorem states that under appropriate conditions the distribution of a normalized version of the sample mean will converge to a standard normal distribution. Given the large sample size of 60, the shape of the sampling distribution of $\bar{Y}$ will be approximately normal.
+
+d.
+
+$$
+P(\bar{Y} < 2.5) - P(\bar{Y} < 1.5) = P\Big(Z < \frac{2.5-2}{\sqrt{0.005555555}}\Big) - P\Big(Z < \frac{1.5-2}{\sqrt{0.005555555}}\Big) = 1
+$$
+e.
+
+$$
+P(\bar{Y} > 2.2) = 1 - P(\bar{Y} < 2.2) = 1 - P\Big(Z < \frac{2.2-2}{\sqrt{0.005555555}}\Big) = 1 - P(Z < 2.6845) = 0.9963
+$$
+
+## Q 13 6.90 pg 273
+
+a. 0.0015
+
+$$
+\mu=(20)(0.4)=8 \newline
+\sigma=\sqrt{(20)(0.4)(0.6)}=\sqrt{4.8}= 2.19089 \newline
+z=\frac{x-\mu}{\sigma}=\frac{(2-0.5)-8}{2.19} = -2.9680 \rightarrow P(Z<-2.97)=0.0015
+$$
+
+b.
+
+$$
+z=\frac{x-\mu}{\sigma}=\frac{(10+0.5)-8}{2.19} = 1.1415 \rightarrow P(Z<1.14) = 0.1271
+$$
+
+c.
+
+$$
+\text{a: }P(X<2) = P(X=0)+P(X=1) = 0.5-0.4985 = 0.0015 \newline
+\text{b: }P(X>10) = P(X=11)+P(X=12)+P(X=13)+P(X=14)+P(X=15)+P(X=16)+P(X=17)+P(X=18)+P(X=19)+P(X=20) = 1-0.8725 = 0.1275
+$$
+
+## Q 14 7.108 pg 362
+
+a. please i calculated everything else by hand,....i used r just once...please.....i beg you
+
+```{r}
+leadcop <- read.csv("LEADCOPP.csv")
+x = leadcop$LEAD
+alpha  =0.01
+n = length(x)
+mp = c(-1,1)
+mean(x) + mp*qt(1-alpha/2,n-1 )*sd(x)/sqrt(n)
+```
+
+b. okay maybe i used r twice...but...i beg you...please...its3am....im tired
+```{r}
+x = leadcop$COPPER
+alpha  =0.01
+n = length(x)
+mp = c(-1,1)
+mean(x) + mp*qt(1-alpha/2,n-1 )*sd(x)/sqrt(n)
+```
+
+c. 
+The confidence interval in part a signifies that we are 99% confident the mean lead level in drinking water is between 1.15 and 6.92. 
+The confidence interval in part b signifies that we are 99% confident the mean copper level in drinking water is between -0.25 and 0.25.
+
+d. Being 99% confident means that if we were to take many samples and construct confidence intervals for each sample, approximately 99% of those intervals would contain the true population mean.
+
+
+## Q 15 7.114 pg 364
+
+a.
+
+```{r}
+solrad <- read.csv("SOLARAD.csv")
+summary(solrad$STJOS)
+summary(solrad$IOWA)
+```
+
+$$
+\alpha=0.05 \rightarrow \frac{\alpha}{2} = \frac{0.05}{2} = 0.025 \newline
+\text{degrees of freedom: }n=1=7-1=6, t_{0.025}=2.447 \newline
+\bar{d} \pm t_{\alpha/2} \frac{s}{\sqrt{n}} \rightarrow 198.0\pm2.447\frac{44.5}{\sqrt{7}} \rightarrow 198.0\pm41.16 \rightarrow (156.84,239.16)
+$$
+
+We are 95% confident that the mean difference in solar radiation between the two sites is between 156.84 and 239.16.
+
+
+## Q 16 7.116 pg 364
+
+```{r}
+diazinon <- read.csv("DIAZINON.csv")
+summary(diazinon$DAY)
+summary(diazinon$NIGHT)
+
+day <- c(5.4, 2.7, 34.2, 19.9, 2.4, 7.0, 6.1, 7.7, 18.4, 27.1, 16.9)
+night <- c(24.3, 16.5, 47.2, 12.4, 24.0, 21.6, 104.3, 96.9, 105.3, 78.7, 44.6)
+
+differences <- day - night
+sum(differences) # use this number for sum of differences
+
+differences2 <- (day-night)^2
+sum(differences2) # use this number for sum of squared differences
+```
+
+a.
+
+$$
+\bar{d}=\frac{\sum d_{i}}{n} = \frac{-428}{11} = 38.909 \newline
+s_{d}^{2} = \frac{\sum d_{i}^{2} - \frac{\Big( \sum d_{i}\Big)^{2} }{n} }{n-1} = \frac{30033.96 - \frac{(-428)^{2}}{11} }{11-1} = 1338.0869 \newline
+s_{d} = \sqrt{s_{d}^{2}} = \sqrt{1338.0869} = 36.5799 \newline
+\bar{d}\pm t_{\alpha/2}\frac{s_{d}}{\sqrt{n}} \rightarrow 38.909\pm1.812\frac{36.5799}{\sqrt{11}} \rightarrow -38.909\pm19.985 \rightarrow (-58.894, -18.924)
+$$
+
+We are 95% confident that the true mean difference in diazinon levels between day and night is between -58.894 and -18.924.
+
+b. We assume the population of differences is normal
+
+c. Since the confidence interval does not contain 0, there is evidence of a difference in the mean diazinon residue between day and night. Since the interval only contains negative numbers, the night mean is greater than the day mean.
+
 
 
