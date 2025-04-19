@@ -1,0 +1,59 @@
+---
+title: "ass4"
+author: "Tiffany Nguyen"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Q 1 7.118 pg 364
+
+
+
+## Q 2 7.120 pg 365
+
+
+
+## Q 3 7.128 pg 367
+
+
+
+
+## Q 4 8.24 pg 390
+
+
+
+
+## Q 5 8.28 pg 392
+
+
+
+
+
+## Q 6 8.44 pg 401
+
+
+
+
+
+
+
+## Q 7 8.84 pg 425 - This refers to 8.39 NOT 8.33
+
+
+
+
+
+## Q 8 8.99 pg 438
+
+
+
+
+
+## Q 9 8.104 pg 439
