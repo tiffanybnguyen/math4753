@@ -1,0 +1,223 @@
+---
+title: "MATH 4753 Project 2"
+author: "Tiffany Nguyen"
+date:  "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    code_folding: show
+    csl: biomed-central.csl
+    df_print: paged
+    fig_caption: yes
+    fig_height: 6
+    fig_width: 7
+    number_sections: yes
+    theme: journal
+    toc: yes
+    toc_float: yes
+  word_document:
+    toc: yes
+    toc_depth: 4
+  pdf_document:
+    df_print: kable
+    fig_caption: yes
+    fig_height: 6
+    fig_width: 7
+    highlight: tango
+    toc: yes
+    toc_depth: 4
+bibliography: project.bib
+abstract: This project is all about applications of SLR to real data using R
+---
+
+<center>
+
+![Dr. Wayne Stewart](wayne.jpg "My Picture"){ width=20% }
+
+</center>
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(leaflet)
+library(dplyr)
+```
+
+# My Video
+
+<video width="320" height="240" controls>
+  <source src="usingvideoinrmd.mp4" type="video/mp4">
+Your browser does not support the video tag.
+</video>
+
+
+# Introduction
+
+Here you should introduce the data and the problem you wish to solve.
+Use your  own subheadings. Fill with informative sentences and pictures and links.
+You may inclucde sub-sub headings.
+You can cite from your bibliography [see @millar and @crawley]
+
+The data was collected here:
+
+```{r map, echo=FALSE, fig.align='center'}
+leaflet() %>%
+  setView(lng=-97.445717, lat=35.205894, zoom= 16) %>% 
+  addTiles() %>%
+  addMarkers(lng=-97.445717, lat=35.205894, popup="We collected grasshoppers here!! Dr Stewart helped.") 
+```
+
+
+
+## What are the variables? 
+```{r datacars}
+data(mtcars)
+
+library(DT)
+datatable(
+  mtcars,filter = 'top', options = list(
+  pageLength = 5, autoWidth = TRUE, editable = TRUE, dom = 'Bfrtip',
+    buttons = c('copy', 'csv', 'excel', 'pdf', 'print')),
+caption = htmltools::tags$caption(
+    style = 'caption-side: bottom; text-align: center;',
+    'Table 2: ', htmltools::em('This is a simple caption for the table.')
+  )
+) %>%
+  formatStyle('mpg',  color = 'red', backgroundColor = 'orange', fontWeight = 'bold')
+
+
+```
+
+```{r crosstalk}
+library(crosstalk)
+library(leaflet)
+library(DT)
+
+# Wrap data frame in SharedData
+sd <- SharedData$new(quakes[sample(nrow(quakes), 100),])
+
+# Create a filter input
+filter_slider("mag", "Magnitude", sd, column=~mag, step=0.1, width=250)
+
+# Use SharedData like a dataframe with Crosstalk-enabled widgets
+bscols(
+  leaflet(sd) %>% addTiles() %>% addMarkers(),
+  datatable(sd, extensions="Scroller", style="bootstrap", class="compact", width="100%",
+    options=list(deferRender=TRUE, scrollY=300, scroller=TRUE))
+)
+```
+
+
+```{r}
+#devtools::install_github("jcheng5/d3scatter")
+
+library(d3scatter)
+
+shared_mtcars <- SharedData$new(mtcars)
+bscols(widths = c(3,NA,NA),
+  list(
+    filter_checkbox("cyl", "Cylinders", shared_mtcars, ~cyl, inline = TRUE),
+    filter_slider("hp", "Horsepower", shared_mtcars, ~hp, width = "100%"),
+    filter_select("auto", "Automatic", shared_mtcars, ~ifelse(am == 0, "Yes", "No"))
+  ),
+  d3scatter(shared_mtcars, ~wt, ~mpg, ~factor(cyl), width="100%", height=250),
+  d3scatter(shared_mtcars, ~hp, ~qsec, ~factor(cyl), width="100%", height=250)
+)
+```
+
+### Sub sub headings can be useful
+
+[^1]: A little footnote
+
+### Plot data
+
+```{r carcharacteristics, fig.height = 5, fig.cap = "MTCARS",fig.align='center',fig.cap="Graph of data with loess smoother"}
+library(ggplot2)
+g = ggplot(mtcars, aes(x = disp, y = mpg, color = cyl)) + geom_point()
+g = g + geom_smooth(method = "loess")
+g
+```
+
+
+## How were the data collected? 
+
+## What is the story behind the data?
+
+## Why was it gathered? 
+
+## What is your interest in the data?
+
+### Include pictures `![](jpeg)`
+
+## What problem do you wish to solve?
+
+# Theory needed to carry out SLR
+## Main result 1
+## Main result 2
+## Main result 3 etc
+
+# Validity with mathematical expressions
+
+
+The following function was taken from [https://rpubs.com/therimalaya/43190](https://rpubs.com/therimalaya/43190)
+
+## Checks on validity
+
+### Straight trend line  
+
+#### Use trendscatter
+
+### Errors distributed Normally
+
+$$\epsilon_i \sim N(0,\sigma^2)$$
+
+
+
+#### Shapiro-wilk
+
+### Constant variance
+
+#### Residual vs fitted values
+
+#### trendscatter on Residual Vs Fitted
+
+### Zero mean value of $\epsilon$
+
+### Independence of data 
+
+# Model selection if you compared models 
+
+## Use adjusted $R^2$ 
+$$R_{adj}^2 =$$
+
+
+
+# Analysis of the data
+
+## Make sure you include many great plots
+
+## Add the trend to the data
+
+
+## Summary lm object
+
+### Interpretation of all tests
+### Interpretation of multiple R squared
+### Interpretation of all point estimates
+## Calculate cis for $\beta$ parameter estimates
+### Use of `predict()`
+### Use of `ciReg()`
+
+### Check on outliers using cooks plots
+
+Remember to interpret this plot and all other plots
+
+
+
+# Conclusion
+## Answer your research question
+## Suggest ways to improve model or experiment
+
+
+# References
+  
