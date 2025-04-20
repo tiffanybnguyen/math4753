@@ -14,46 +14,492 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Q 1 7.118 pg 364
 
+a.
+
+```{r}
+library(dplyr)
+nzbirds <- read.csv("NZBIRDS.csv")
+nzbirds_sample <- sample_n(nzbirds, 35)
+```
+
+
+b.
+
+```{r}
+# calculate mean and standard deviation
+bird_mean <- mean(nzbirds_sample$Body.Mass, na.rm=TRUE)
+bird_sd <- sd(nzbirds_sample$Body.Mass, na.rm=TRUE)
+
+# mean
+bird_mean
+
+# standard deviation
+bird_sd
+
+# construct 95% confidence interval
+n_length <- length(nzbirds_sample$Body.Mass)
+n_standard_error <- bird_sd / sqrt(n_length)
+n_margin_error <- qt(0.975, df = n_length - 1)  * n_standard_error
+
+n_ci <- c(bird_mean - n_margin_error, round((bird_mean + n_margin_error), 3))
+
+# confidence interval
+n_ci
+```
+
+c. The calculated sample ci (`r n_ci`) is a 95% confidence interval for the mean body mass of the New Zealand birds in the sample.
+
+
+d. The calculated sample ci is (`r n_ci`). The $\mu$ from the MINITAB printout for body mass is 9113 (estimated=`r bird_mean`), which is within the sample ci. The calculated interval is very likely to contain $\mu$ because the sample size is large enough (>30ish) to provide a reliable estimate of the population parameter.
+
+
+e.
+
+```{r}
+# b-d for egg length
+egg_mean <- mean(nzbirds_sample$Egg.Length, na.rm=TRUE)
+egg_sd <- sd(nzbirds_sample$Egg.Length, na.rm=TRUE)
+
+# mean
+egg_mean
+
+# standard deviation
+egg_sd
+
+# construct 95% confidence interval
+egg_length <- length(nzbirds_sample$Egg.Length)
+egg_standard_error <- egg_sd / sqrt(egg_length)
+egg_margin_error <- qt(0.975, df = egg_length - 1) * egg_standard_error
+egg_ci <- c(egg_mean - egg_margin_error, round((egg_mean + egg_margin_error), 3))
+
+# confidence interval
+egg_ci
+```
+ 
+The calculated sample ci (`r egg_ci`) is a 95% confidence interval for the mean egg length of the New Zealand birds in the sample.
+
+The calculated sample ci is (`r egg_ci`). The $\mu$ from the MINITAB printout for egg length is 61.06 (estimated=`r egg_mean`), which is within the sample ci. The calculated interval is very likely to contain $\mu$ because the sample size is large enough (>30ish) to provide a reliable estimate of the population parameter.
+
+
+f.
+
+$$
+\text{using } (1-\alpha) \text{ 100% Confidence Interval: } (\hat{p}_{1}-\hat{p}_{2}) \pm z_{\alpha/2} \sqrt{ \frac{\hat{p}_{1}\hat{q}_{1}}{n_{1}}+\frac{\hat{p}_{2}\hat{q}_{2}}{n_{2}} } \newline
+
+(\frac{21}{38}-\frac{7}{78}) \pm (1.96) \sqrt{ \frac{(\frac{21}{38})(\frac{17}{38})}{38} + \frac{(\frac{7}{78})(\frac{71}{78})}{78} } = (0.292544, 0.633232)
+
+$$
+
+
+g. The theory that the proportion of flightless birds is higher in extinct species than in nonextinct species is supported by the confidence interval for the difference in proportions of flightless birds between extinct and nonextinct species, which is (0.292544, 0.633232). The confidence interval does not include 0, indicating that there is a significant difference between the two groups. The proportion of flightless birds in extinct species is higher (positive ci) than in nonextinct species, supporting the theory.
 
 
 ## Q 2 7.120 pg 365
 
+a.
+
+$$
+\text{using } (1-\alpha) \text{ 100% Confidence Interval: } (\bar{y}_{1}-\bar{y}_{2}) \pm z_{\alpha/2}\sqrt{\frac{s_{1}^{2}}{n_{1}}+\frac{s_{2}^{2}}{n}} \newline
+(1312-1352) \pm 1.645\sqrt{ \frac{422^{2}}{100}+\frac{271^{2}}{47} } = (-40) \pm 95.117627893 = (-135.11762789, 55.11762789)
+$$
+
+b.
+
+$$
+\text{using } (1-\alpha) \text{ 100% Confidence Interval for ratio of Two Population Variances: } \left(\frac{s_{1}^{2}}{s_{2}^{2}}\right) \left(\frac{1}{F_{\alpha/2,(v_{1},v_{2})}}\right) \leq \frac{\sigma_{1}^{2}}{\sigma_{2}^{2}} \leq \left(\frac{s_{1}^{2}}{s_{2}^{2}}\right) F_{\alpha/2,(v_{2},v_{1})} \newline
+\text{F-values given from hint: } F_{0.05(99,46)}=1.54818 \text{ and } F_{0.05(46,99)} = 1.49194 \newline
+\left(\frac{422^{2}}{271^{2}}\right) \left(\frac{1}{1.54818}\right) \leq \frac{\sigma_{1}^{2}}{\sigma_{2}^{2}} \leq \left(\frac{422^{2}}{271^{2}}\right) (1.49194) = 1.5662636 \le \frac{\sigma_{1}^{2}}{\sigma_{2}^{2}} \le 3.6177427
+$$
+
+Yes, there is evidence that the two shear stress variances differ. The confidence interval for the ratio of the two population variances is (1.5662636, 3.6177427), which does not include 1. This indicates that the variances are significantly different from each other, suggesting that the two sheer stress variances DO differ.
 
 
 ## Q 3 7.128 pg 367
 
+a. Show that $y^{2}/\sigma^{2}$ has a chi-square distribution with 1 degree of freedom
 
+Given that y is a random sample of size n = 1 from a normal distribution with mean 0 and unknown variance $\sigma^{2}$, we can express the distribution as:
+
+$$
+y \sim N(0, \sigma^{2})
+$$
+
+We know that:
+
+$$
+\frac{y^{2}}{\sigma^{2}} \sim N(0,1)
+$$
+
+Since $\mu=0$, we have:
+
+$$
+\frac{y}{\sigma} \sim N(0,1)
+$$
+
+Squaring both sides, we get:
+
+$$
+\Big(\frac{y^{2}}{\sigma^{2}}\Big) \sim \chi^{2} (1)
+$$
+
+Then:
+
+$$
+\frac{y^{2}}{\sigma^{2}} \sim \chi^{2} (1) \text{ because } \frac{y}{\sigma} \sim N(0,1)
+$$
+
+yay!
+
+b.
+
+We will use the result from part a to help calculate the confidence interval for $\sigma^{2}$.
+
+$$
+\text{Result from part a: } \frac{y^{2}}{\sigma^{2}} \sim \chi^{2} (1)
+$$
+
+Let X = $\frac{y^{2}}{\sigma^{2}}$. Since X = $\chi^{2}(1)$, the 95% confidence interval can be derived from the chi-square distribution with 1 degree of freedom.
+
+$$
+P\Big(\chi^{2}_{1-\alpha/2} \leq \frac{y^{2}}{\sigma^{2}} \leq \chi^{2}_{\alpha/2}\Big) = P\Big(\chi^{2}_{0.025} \leq \frac{y^{2}}{\sigma^{2}} \leq \chi^{2}_{0.975}\Big) = P\Big(\frac{Y^{2}}{\chi^{2}_{\alpha/2}} \le \sigma^{2} \le \frac{Y^{2}}{\chi^{2}_{1-\alpha/2}} \Big) 
+$$
+
+Using chi-square distribution table, we get the interval:
+
+$$
+P\Big(\frac{Y^{2}}{5.024} \le \sigma^{2} \le \frac{Y^{2}}{0.000982} \Big) \text{ or } P\Big(\frac{Y^{2}}{5.024}, \frac{Y^{2}}{0.000982} \Big)
+$$
 
 
 ## Q 4 8.24 pg 390
 
+a. 
+$H_{0}$: The mean surface roughness of coated interior pipe, $\mu$, is 2 micrometers.
+$H_{1}$: The mean surface roughness of coated interior pipe, $\mu$, differs from 2 micrometers.
 
+b.
+T: -1.02
+p-value: 0.322
 
+c.
+
+```{r}
+qt(0.975, df=19)
+```
+The rejection region for the hypothesis test, using $\alpha = 0.05 (\alpha/2=0.025)$, is 
+
+$$
+t < -2.093 \text{ or } t > 2.093
+$$
+
+d. 
+Since the test statistic $(t=-1.02)$ does not fall in the rejection region, we fail to reject the null hypothesis. There is not enough evidence to conclude that the mean surface roughness of coated interior pipe differs from 2 micrometers.
+
+e.
+Both the confidence interval and the test statistic give the same conclusion because they are based on the same sampling distribution, standard error, and confidence level. The confidence interval includes the value 2, indicating that 2 is a possible value for the population mean. As explained above, the test statistic does not fall into the rejection region, indicating that we fail to reject the null hypothesis. Both methods lead to the same conclusion that there is not enough evidence to suggest that the mean surface roughness of coated interior pipe differs from 2 micrometers.
 
 ## Q 5 8.28 pg 392
 
+a.
 
+```{r}
+lakes <- read.csv("WISCLAKES.csv")
 
+# mean and sd for test statistic
+mean <- mean(lakes$DOC)
+sd <- sd(lakes$DOC)
+n <- length(lakes$DOC)
+test_statistic <- (mean - 15) / (sd / sqrt(n))
+test_statistic
+
+# can also do this i guess
+t.test(lakes$DOC, mu=15, alternative="two.sided", conf.level=0.90)
+```
+
+This is calculated using the formula:
+$$
+t = \frac{\bar{y} - \mu}{s / \sqrt{n}} = \frac{14.52 - 15}{12.96 / \sqrt{25}} = -0.185
+$$
+
+The p-value (0.8535) is greater than the significance level $(\alpha=0.10)$ so we fail to reject the null hypothesis. Therefore the sample is representative of all Wisconsin lakes for the characteristic, dissolved organic compound (DOC).
+
+b.
+
+t-value (-1.711) is taken from table with $n-1=24$ degrees of freedom 
+
+$$
+t = \frac{\bar{y} - \mu}{s / \sqrt{n}} \implies t= \Big(\frac{s}{\sqrt{n}} \Big) = \bar{y}-\mu_{0} \implies \bar{y} = \mu_{0} + t \Big(\frac{s}{\sqrt{n}} \Big) = 15 \pm 1.711\Big( \frac{12.96}{\sqrt{25}} \Big) = (10.565, 19.435) \newline
+$$
+
+Now we find the probability of rejecting $H_{0}$ (power):
+
+$$
+P(\bar{y}<10.565 | \mu=14) + P(\bar{y}>19.435 | \mu=14) = P \left( t<\frac{10.565-14}{\frac{12.96}{\sqrt{25}} } \right) + P \left( t>\frac{19.435-14}{\frac{12.96}{\sqrt{25}} } \right) = \newline
+P(t<-1.33) + P(t>2.10) = 0.0980+0.0232 = 0.1212
+$$
+
+The power of the test is 0.1212, which is the probability of rejecting the null hypothesis when the true mean DOC is 14. Since the power is low, the test is not very effective in detecting a true mean of 14 grams/$m^{3}$ if it differs from 15 grams/$m^{3}$.
 
 
 ## Q 6 8.44 pg 401
 
+```{r}
+orchard <- read.csv("ORCHARD.csv")
+orchard <- orchard[-5,] # remove that dumbass NA row
+
+clear_cloudy <- orchard$RATIO[orchard$CONDITION %in% c("CLEAR", "CLOUD")]
+froggy <- orchard$RATIO[orchard$CONDITION == "FOG"]
+
+# calculate means and standard deviations
+clear_cloudy_mean <- mean(clear_cloudy)
+clear_cloudy_sd <- sd(clear_cloudy)
+froggy_mean <- mean(froggy)
+froggy_sd <- sd(froggy)
+
+# calculate sample sizes
+clear_cloudy_n <- length(clear_cloudy)
+froggy_n <- length(froggy)
+
+# calculate pooled sd
+s_p <- ((clear_cloudy_n - 1) * clear_cloudy_sd^2 + (froggy_n - 1) * froggy_sd^2) / (clear_cloudy_n + froggy_n - 2)
+
+# calculate t-statistic
+t_stat <- ((clear_cloudy_mean - froggy_mean)) / sqrt(s_p * (1 / clear_cloudy_n + 1 / froggy_n))
+t_stat
+
+cv <- qt(0.975, df = clear_cloudy_n + froggy_n - 2)
+cv
+
+# another way i guess (idk if this one works, so im stick with my calculated value)
+t.test(clear_cloudy, froggy, alternative = "two.sided", conf.level = 0.95)
+```
+
+We use these formulas (I give up using my phone as a calculator. R can do it, so here's the formulas to show that I know how to do it :( ):
+
+$$
+\text{Calculate the pooled sd: } s_{p}^{2} = \frac{ (n_{1} - 1)s_{1}^{2} + (n_{2} - 1)s_{2}^{2} }{ n_{1} + n{2} - 2 } \newline
+\text{Calculate the test statistic: } T=\frac{ (\bar{y}_{1} - \bar{y}_{2}) - D_{0} }{ \sqrt{ s_{p}^{2} \Big(\frac{1}{2_{1}} + \frac{1}{n_{2}} \Big) } }
+$$
+
+using the calculated t-value, we get t=2.045, which is less than the critical value of 2.200, so we fail to reject the null hypothesis. Furthermore, the p-value is 0.1514, which also indicates that there is no significant difference between the mean ratios of the two conditions at the 0.05 significance level.
 
 
+## Q 7 8.84 pg 425 
+
+This refers to 8.39 NOT 8.33
+
+a.
+
+```{r}
+
+gasturbine <- read.csv("GASTURBINE.csv")
+
+# get respective dataframes for each engine type
+traditional <- gasturbine %>% filter(ENGINE == "Traditional")
+aeroderiv <- gasturbine %>% filter(ENGINE == "Aeroderiv")
+advanced <- gasturbine %>% filter(ENGINE == "Advanced")
+
+# get heatrate for each engine
+trad_heat <- traditional$HEATRATE
+aero_heat <- aeroderiv$HEATRATE
+adv_heat <- advanced$HEATRATE
+
+# get total number of engines for each type
+trad_length <- nrow(traditional)
+aero_length <- nrow(aeroderiv)
+adv_length <- nrow(advanced)
+
+alpha <- 0.05
+
+# calculate F statistic
+f_stat <- var(aero_heat) / var(trad_heat)
+f_stat
+
+# calculate acceptance/rejection regions
+qf(c(alpha/2, 1-alpha/2), aero_length - 1, trad_length - 1)
+
+# this also works
+var.test(aero_heat, trad_heat)
+
+```
+
+The f statistic is 4.296996 and the acceptance region is (0.1991693, 2.7633350). Since the F statistic is greater than the upper limit of the acceptance region, we reject the null hypothesis. There is a difference in the variation of heatrates of traditional and aeroderivative engines. The assumption of equal variances in Exercise 8.33 may not be valid.
+
+b.
+
+```{r}
+
+# calculate the F statistic
+f_stat <- var(aero_heat) / var(adv_heat)
+f_stat
+
+# calculate acceptance/rejection regions
+qf(c(alpha/2, 1-alpha/2), aero_length - 1, adv_length - 1)
+
+# this also works
+var.test(aero_heat, adv_heat)
 
 
+```
 
-
-## Q 7 8.84 pg 425 - This refers to 8.39 NOT 8.33
-
-
-
+The F statistic is 17.24913 and the acceptance region is (0.1934834, 3.1283400). Since the F statistic is greater than the upper limit of the acceptance region, we reject the null hypothesis. There is a difference in the variation of heatrates of aeroderivative and advanced engines. The assumption of equal variances in Exercise 8.39 may not be valid.
 
 
 ## Q 8 8.99 pg 438
 
+a.
+$H_{0}$: The variance of the two sites are equal
+$H_{1}$: The variance of the two sites are not equal
+
+b.
+
+```{r}
+
+gobiants <- read.csv("GOBIANTS.csv")
+
+# get the ant species for each region
+dry <- (gobiants %>% filter(Region == "Dry Steppe"))$AntSpecies
+gobi <- (gobiants %>% filter(Region == "Gobi Desert"))$AntSpecies
+
+# calculate F statistic
+f_stat <- var(dry) / var(gobi)
+f_stat
+
+# this also works
+var.test(dry, gobi)
+
+```
+
+The test statistic is 1.368432.
+
+c.
+
+```{r}
+
+alpha <- 0.05
+
+# calculate acceptance/rejection regions
+qf(c(alpha/2, 1-alpha/2), length(dry) - 1, length(gobi) - 1)
 
 
+```
+
+The calculated rejection region for the test if $\alpha=0.05$ is t < 0.1067866 or t > 7.3878858). 
+
+d.
+
+```{r}
+
+# degrees of freedom cause i dont wanna type alladat
+df1 <- length(dry) - 1
+df2 <- length(gobi) - 1
+
+# calculate p-value based on which tail lol
+p_value <- 2 * min(pf(f_stat, df1, df2), 1 - pf(f_stat, df1, df2))
+p_value
+
+```
+
+The p-value is 0.7263776
+
+e.
+The variances of the two sites are not significantly different because the test statistic (1.368432) does not fall in the rejection region t < 0.1067866 or t > 7.3878858 and the p-value (0.7263776) is greater than the significance level of 0.05. Therefore, we fail to reject the null hypothesis that the variances of the two sites are equal.
 
 
 ## Q 9 8.104 pg 439
+
+```{r}
+
+thruput <- read.csv("THRUPUT.csv")
+
+# manual calculations for the latex
+human <- thruput$HUMAN
+auto <- thruput$AUTO
+
+diff <- human-auto
+
+# get mean sample of differences
+mean_diff <- mean(diff) # 32.5625
+
+# get sd of the differences
+sd_diff <- sd(diff) # 35.03243
+
+t_stat <- mean_diff / (sd_diff/sqrt(8)) # -2.629011
+t_stat
+
+t.test(thruput$HUMAN, thruput$AUTO, paired = TRUE)
+```
+
+$$
+t = \frac{\bar{d} - D_{0}}{\frac{s_{d}}{\sqrt{n}}} = \frac{-32.5625 - 0}{\frac{35.03243}{8}} = -2.629011 \newline
+$$
+
+The rejection region requires $\alpha/2=0.025$, so we use the t-distribution with $n-1=7$ degrees of freedom to find the critical value: $t_{0.025} = 2.365$. Therefore the rejection region is t < -2.365 or t > 2.365. 
+
+The calculated t-statistic (-2.629011) is less than -2.365, so we reject the null hypothesis that the mean difference in throughput between the human and automated method is 0. This suggests that there is a statistical significant difference between the two.
+
+
+## Q 10
+
+```{r}
+
+set.seed(35)
+
+myboot <- function(iter = 10000, x, fun = "mean", alpha = 0.05, mean, ...) {
+  
+  n = length(x) # sample size
+  
+  # Bootstrap resampling
+  y = sample(x, n * iter, replace = TRUE)
+  rs.mat = matrix(y, nrow = n, ncol = iter, byrow = TRUE)
+  xstat = apply(rs.mat, 2, fun) # bootstrap sample statistics
+  
+  # Bootstrap confidence interval
+  ci_bootstrap = quantile(xstat, c(alpha / 2, 1 - alpha / 2))
+  
+  # Theoretical confidence interval using sample statistics
+  sample_mean = mean(x)
+  sample_sd = sd(x)
+  error_margin = qt(1 - alpha / 2, df = n - 1) * (sample_sd / sqrt(n))
+  ci_theoretical = c(sample_mean - error_margin, sample_mean + error_margin)
+  
+  # Calculate the t-statistic
+  t_statistic = (sample_mean - mean) / (sample_sd / sqrt(n))
+  
+  # Plot histogram of bootstrap sample statistics
+  para = hist(xstat, breaks=11, freq = FALSE, las = 1,
+              main = paste("Histogram of Bootstrap sample statistics", "\n", "alpha=", alpha, " iter=", iter, sep = ""), col = rainbow(11),
+              ...)
+  
+  # Plot point estimate
+  abline(v = sample_mean, lwd = 3, col = "Black") # Vertical line
+  
+  # Plot bootstrap confidence interval
+  segments(ci_bootstrap[1], 0, ci_bootstrap[2], 0, lwd = 4, col = "Red")
+  text(ci_bootstrap[1], 0, paste("(", round(ci_bootstrap[1], 2), sep = ""), col = "Red", cex = 1.5, pos = 3)
+  text(ci_bootstrap[2], 0, paste(round(ci_bootstrap[2], 2), ")", sep = ""), col = "Red", cex = 1.5, pos = 3)
+  
+  # Plot theoretical confidence interval
+  segments(ci_theoretical[1], 0, ci_theoretical[2], 0, lwd = 4, col = "Blue")
+  text(ci_theoretical[1], 0.1, paste("(", round(ci_theoretical[1], 2), sep = ""), col = "Blue", cex = 1.5, pos = 3)
+  text(ci_theoretical[2], 0.1, paste(round(ci_theoretical[2], 2), ")", sep = ""), col = "Blue", cex = 1.5, pos = 3)
+  
+  # Plot point estimate text
+  text(sample_mean, max(para$density) / 2, round(sample_mean, 2), cex = 3, col = "Black")
+  
+  return(list(
+    fun = fun,
+    x = x,
+    t = t_statistic,
+    ci = ci_bootstrap,
+    cit = ci_theoretical
+  )) # Some output to use if necessary
+  
+}
+
+sam<-round(rnorm(30,mean=20,sd=3),3)
+
+myboot(x=sam, mean=20)
+
+
+```
