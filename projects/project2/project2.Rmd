@@ -1,0 +1,486 @@
+---
+title: "MATH 4753 Project 2"
+author: "Tiffany Nguyen"
+date:  "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    code_folding: show
+    csl: biomed-central.csl
+    df_print: paged
+    fig_caption: yes
+    fig_height: 6
+    fig_width: 7
+    number_sections: yes
+    theme: journal
+    toc: yes
+    toc_float: yes
+  word_document:
+    toc: yes
+    toc_depth: 4
+  pdf_document:
+    df_print: kable
+    fig_caption: yes
+    fig_height: 6
+    fig_width: 7
+    highlight: tango
+    toc: yes
+    toc_depth: 4
+bibliography: project2.bib
+abstract: This project is all about applications of SLR to real data using R. I will be using the textbook, data set, and skills acquired over the course of this semester to analyze the data using R. I will be utilizing a dataset that contains the distance from a fire station and its corresponding fire damage cost. This data was sourced from William M. Mendenhall & Terry L. Sincich’s textbook, Statistics for Engineering and the Sciences, 6th (2016). I wish to perform Simple Linear Regression to the data set so that I will better understand the relationship that the fire station distance and fire damage cost may have with each other.
+---
+
+<center>
+
+![Tiffany Nguyen](/Users/tiffanynguyen/Documents/College/Sophomore/Spring_2025/Applied_Statistical_Methods/MATH4753nguy0850/projects/project2/tiffany.png "My Picture"){ width=20% }
+
+</center>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(leaflet)
+library(dplyr)
+```
+
+# My Video
+
+![Project 2 Video](/Users/tiffanynguyen/Documents/College/Sophomore/Spring_2025/Applied_Statistical_Methods/MATH4753nguy0850/projects/project2/project2_recording.mp4 "My Video"){ width=100% }
+
+------------------------------------------------------------------------------------------------------------------------------
+
+# Introduction
+
+## The Data
+
+This data is a small sample of 15 recent fires in a large suburb of a major city, taken from our statistics textbook. [@mendenhall2016statistics]
+
+### Variables
+
+There are two variables in this dataset: The amount of damage in thousands of dollars (y) and the distance in miles (x) between the fire and the nearest fire station are recorded for each fire.
+
+Shown below is a tibble of the FIREDAM data:
+
+```{r}
+firedam <- read.csv("/Users/tiffanynguyen/Documents/College/Sophomore/Spring_2025/Applied_Statistical_Methods/MATH4753nguy0850/projects/project2/FIREDAM.csv", header=TRUE)
+head(firedam)
+```
+
+
+### How the Data was Collected
+
+This data was collected by a fire insurance company. An assumption is made that insurance pulled records of major residential fires.
+
+### Story Behind the Data
+
+A fire insurance company wants to determine if there is a relationship between the distance, in miles, of a fire from a fire station, to the total cost of the fire damage in thousands of dollars. The study was conducted in a large suburb of a major city with a sample of 15 recent fires in a large suburb of a major city is selected.
+
+### Why the Data was Gathered
+
+This data was gathered because the fire insurance company wants to relate the amount of fire damage in major residential fires to the distance between the residence and the nearest fire station.
+
+## My Interest in the Data
+
+I am specifically interested in this data because I believe that if we can determine the relationship between the distance from a fire station and the amount of damage caused by a fire, we can better understand how to allocate resources to fire stations, to reduce costs and potentially save lives.
+
+## The Problem to be Solved
+
+I have undertaken to analyze the data in order to determine what, if any, statistical relationship exists between the fire station distance and the fire damage cost in major residential fires. Success of this project will be determined by the accuracy of the model and the ability to make predictions based on the data.
+
+## Preliminary Plots and Interpretation of the Data
+
+```{r}
+library(s20x)
+pairs20x(firedam)
+
+library(ggplot2)
+g = ggplot(firedam, aes(x=DISTANCE, y=DAMAGE)) + geom_point()
+g = g + geom_smooth(method="loess")
+g
+```
+
+These preliminary plots serve to examine what relationship appears to be present between the data gathered. It appears to be somewhat uniform and linear, but the following statistical analysis will determine the degree to which this is true, and will determine the extent of the actual relationship.
+
+------------------------------------------------------------------------------------------------------------------------------
+
+# Theory behind the Analysis
+
+I believe that the damage (Y) tends to increase linearly as distance (X), that is, when the amount of damage in thousands of dollars is increased, the distance between the fire and fire station also increases. I want to make a model relating the two variables to one another by drawing a line through all the points. I will define damage as my dependent variable, and distance as my independent variable.
+
+Making the assumption that the dataset may potentially reject the null hypothesis through a comparative linear model, we will use a linear regression model as the model for the data. Specifically, we will use the simple linear regression model (SLR) to make the assumption that when the y data is plotted against the x data, the mean value for any given x will form a straight line. Any deviations from this line will be $\epsilon$, or the error component. This statement is written as:
+
+$$
+y=\beta_{0}+\beta_{1}x_{i}+\epsilon_{i}
+$$
+
+Where $\beta_{0}$ and $\beta_{1}$ are the unknown parameters, $\beta_{0}+\beta_{1}x$ is the mean value of $y$ for a given $x$, and $\epsilon$ is the error component. Working with the assumption that some points are going to deviate from the line, I know that some will be above and below the line, with an $E(\epsilon)=0$. This would make the mean value of y:
+
+$$
+E(y)=E(\beta_{0}+\beta_{1}x_{i}+\epsilon_{i}) \newline
+=\beta_{0}+\beta_{1}x_{i}+E(\epsilon_{i}) \newline
+=\beta_{0}+\beta_{1}x_{i}
+$$
+
+Thus the mean value of y for any given value of x will be represented by $E(Y|x)$ and will graph as a straight line, with a y-intercept of $\beta_{0}$ and a slope of $\beta_{1}$.
+
+To fit a Simple Linear Regression (SLR) model to a given dataset, it is necessary to estimate the values of the parameters $\beta_{0}$ and $\beta_{1}$. The validity of these estimates depends on the sampling distributions of the estimators, which are then influenced by the probability distribution of $\epsilon$. Therefore, the following assumptions about $\epsilon$ must be made:
+
+1. The mean of the probability distribution of $\epsilon=0$;
+2. The variance ($\sigma^{2}$) of the probability distribution of $\epsilon$ is constant for all values of the independent variable. In the case of a straight-line model, the $Var(\epsilon)$ is constant for all values of $x$;
+3. The distribution of $\epsilon$ is normal;
+4. The error component associated with observations are independent of one another.
+
+## Estimating the Parameters
+
+In order to estimate $\beta_{0}$ and $\beta_{1}$, we will use the method of least squares to determine the line that best fits the data points with a minimum sum of squares of the deviations. This is called the SSE (sum of squares for error). Note that in MATH4753, SSE is equivalent to SSR. Since the straight-line model is $y=\beta_{0}+\beta_{1}x_{i}+\epsilon_{i}$, the estimator will be $\hat{y_{i}}=\hat{\beta_{0}}+\hat{\beta_{1}}x_{i}$. The residual (deviation of the i-th value of y from its predicted value) is calculated by 
+
+$$
+(y_{i} - \hat{y_{i}})=y_{i}-(\hat{\beta_{0}}+\hat{\beta_{1}}x_{i})
+$$ 
+Thus, the SSE (or SSR) is
+
+$$
+\sum_{i=1}^{n}[y_{i}-(\hat{\beta_{0}}+\hat{\beta_{1}}x_{i})]
+$$
+
+If the model fits nicely with the data, the residuals should have have an approximately normal distribution, a mean of 0, and a constant variance. 
+
+First we must hypothesize a model to relate the fire damage to the distance from the nearest fire station. We will hypothesize:
+
+$$
+y=\beta_{0}+\beta_{1}x+\epsilon
+$$
+
+where $\beta_{0}$ is the y-intercept of the line, $\beta_{1}$ is the slope of the line, and $\epsilon$ (again) is the random error component.
+
+## Method of Least Squares
+
+Next we must calculate the least squares equation by first getting the least-squares estimates of $\beta_{0}$ and $\beta_{1}$.
+
+```{r}
+firedam.lm <- lm(DAMAGE ~ DISTANCE, data = firedam)
+summary(firedam.lm)
+```
+
+From this summary of firedam.lm we can see ${\beta_{0}}$ and ${\beta_{1}}$ estimates: 
+
+$$
+\hat{\beta_{0}} = 10.2779 \newline
+\hat{\beta_{1}} = 4.9193
+$$
+
+## Calculating the Confidence Interval (CI) for Parameter Estimates
+
+```{r}
+ciReg(firedam.lm, conf.level=0.95, print.out=TRUE)
+```
+
+## Least Squares Estimates
+
+$$
+\hat{\beta_{0}}+\hat{\beta_{1}}x_{i} = 10.2779 + 4.9193x_{i}
+$$
+Given the least-squares estimate of the slope ($\hat{\beta_{1}}=4.9193$), the estimated mean damage is implied to increase by \$4920 for every mile away from the fire station. The y-intercept ($\hat{\beta_{0}}=10.2779$) implies that the estimated mean damage is \$10,277 when the fire is 0 miles from the fire station. However, since $x=0$ is outside of the sampled range of the independent variable, $\hat{\beta_{0}}$ is not meaningful.
+
+------------------------------------------------------------------------------------------------------------------------------
+
+# Validity with Mathematical Expressions
+
+I want to demonstrate that a straight line is (or is not) the best fit for the data gathered. In order to do this, I need to verify that the assumptions made above are indeed correct
+
+## Straight Line Trend
+
+```{r}
+plot(DAMAGE ~ DISTANCE, bg="Blue",pch=21,cex=1.2,
+     ylim=c(0,1.1*max(DAMAGE)),xlim=c(0,1.1*max(DISTANCE)),
+     main="Scatter Plot and Fitted Line of Damage vs Distance", data=firedam)
+abline(firedam.lm)
+```
+
+A simple scatter plot seems to indicate that a straight line is a good fit for the data, but additional statistics can be run to determine the best fit.
+
+## Plot of Residuals
+
+Plotting the residual line segments (the deviations about the fitted line), allows us to visualize the extent to which the points vary from the line we are trying to fit to the data. This also provides us with the RSS (residual sum of squares), which we will use in additional calculations to find the $R^{2}$ value of the line we are trying to fit to the dataset.
+
+```{r}
+plot(DAMAGE ~ DISTANCE,bg="Blue",pch=21,cex=1.2,
+              ylim=c(0,1.1*max(DAMAGE)),xlim=c(0,1.1*max(DISTANCE)),
+              main="Residual Line Segments of Damage vs Distance", data=firedam)
+ht.lm=with(firedam, lm(DAMAGE ~ DISTANCE))
+abline(ht.lm)
+yhat=with(firedam,predict(ht.lm,data.frame(DISTANCE)))
+with(firedam,{segments(DISTANCE,DAMAGE,DISTANCE,yhat)})
+abline(ht.lm)
+```
+
+## Plot of Means
+
+We can visualize the difference between the means of the damage data and distance data by graphing the mean of damage cost versus the mean of distance from fire station with the fitted line and deviations of the fitted line from the mean height added. This will provide us with the MSS (model sum of squares), which we will use in conjunction with the RSS in a few steps.
+
+```{r}
+plot(DAMAGE ~ DISTANCE,bg="Blue",pch=21,cex=1.2,
+              ylim=c(0,1.1*max(DAMAGE)),xlim=c(0,1.1*max(DISTANCE)),
+              main="Mean of Damage vs Distance", data=firedam)
+abline(firedam.lm)
+with(firedam, abline(h=mean(DAMAGE)))
+abline(firedam.lm)
+with(firedam, segments(DISTANCE, mean(DAMAGE), DISTANCE, yhat, col="Red"))
+```
+
+## Plot of Means with Total Deviation Line Segments
+
+Plotting the means of damage cost versus the means of distance from fire station with the fitted line and deviations of the fitted line provides us with the TSS (total sum of squares) and demonstrates visually that $\hat{y}=\bar{y}$
+
+```{r}
+plot(DAMAGE ~ DISTANCE,bg="Blue",pch=21,cex=1.2,
+              ylim=c(0,1.1*max(DAMAGE)),xlim=c(0,1.1*max(DISTANCE)),
+              main="Total Deviation Line Segments of Damage vs Distance", data=firedam)
+with(firedam,abline(h=mean(DAMAGE)))
+with(firedam, segments(DISTANCE,DAMAGE,DISTANCE,mean(DAMAGE),col="Green"))
+```
+
+## RSS, MSS, and TSS
+
+```{r}
+# RSS
+RSS <- with(firedam, sum((DAMAGE - yhat)^2))
+RSS
+
+# MSS
+MSS <- with(firedam, sum((yhat-mean(DAMAGE))^2))
+MSS
+
+# TSS
+TSS <- with(firedam, sum((DAMAGE-mean(DAMAGE))^2))
+TSS
+```
+
+$R^{2}$ is $MSS/TSS$, which means this value calculated is also the value for the trend line. The closer $R^{2}$ is to 1, the better the trend line fits.
+
+```{r}
+MSS/TSS
+```
+
+This value (however close it is to 1) indicates whether or not the trend line (SLR) is a correct fit for the dataset.
+
+## Trendscatter
+
+### Lowess Smoother Scatter Plot
+
+```{r}
+trendscatter(DAMAGE ~ DISTANCE, f = 0.5, data = firedam, main = "Damage vs Distance")
+```
+
+The red lines indicate the region of error where the best fit line can be found. We see a generally linear trend with a reasonable region of error. (this is good)
+
+## Normality/Shapiro-Wilk Test
+
+```{r}
+normcheck(firedam.lm, shapiro.wilk=TRUE)
+```
+
+### Errors Normally Distributed
+
+The p-value for the Shapiro-Wilk test is 0.474. The null hypothesis in this case would be that the errors are distributed normally:
+
+$$
+\epsilon_i \sim N(0,\sigma^2)
+$$
+
+The results of this test indicate that we do not have enough evidence to reject the null hypothesis (0.474 > 0.05), leading us to assume that the data is distributed normally.
+
+## Residual and Fitted Values
+
+```{r}
+dam.lm <- with(firedam, lm(DAMAGE ~ DISTANCE))
+
+# residuals
+height.res <- residuals(dam.lm)
+
+# fitted values
+height.fit <- fitted(dam.lm)
+```
+
+### Plot of Residuals
+
+Plotting residual line segments (deviations about the fitted line) allows us to visualize the extent to which the points vary from the line we are trying to fit to the data. This also provides us with the RSS (residual sum of squares), which we will use in additional calculations to find the $R^{2}$ value of the line we are trying to fit to the dataset.
+
+```{r}
+plot(DAMAGE ~ DISTANCE,bg="Blue",pch=21,cex=1.2,
+              ylim=c(0,1.1*max(DAMAGE)),xlim=c(0,1.1*max(DISTANCE)),
+              main="Residual Line Segments of Damage vs Distance", data=firedam)
+ht.lm=with(firedam, lm(DAMAGE ~ DISTANCE))
+abline(ht.lm)
+yhat=with(firedam, predict(ht.lm, data.frame(DISTANCE)))
+with(firedam,{segments(DISTANCE, DAMAGE, DISTANCE, yhat)})
+abline(ht.lm)
+```
+
+### Plot of Means
+
+The difference between the means of the damage and distance data can be visualized by graphing the mean of damage cost versus the mean of distance from the fire station added with the fitted line and deviations of the fitted line. This will provide us with MSS (model sum of squares), which we will use in conjunction with the RSS.
+
+```{r}
+plot(DAMAGE ~ DISTANCE,bg="Blue",pch=21,cex=1.2,
+              ylim=c(0,1.1*max(DAMAGE)),xlim=c(0,1.1*max(DISTANCE)),
+              main="Residual Line Segments of Damage vs Distance", data=firedam)
+abline(firedam.lm)
+with(firedam, abline(h=mean(DAMAGE)))
+abline(firedam.lm)
+with(firedam, segments(DISTANCE, mean(DAMAGE), DISTANCE, yhat, col="Red"))
+```
+
+### Trendscatter on Residual vs Fitted Values
+
+```{r}
+trendscatter(height.res~height.fit, f = 0.5, data = dam.lm, xlab="Fitted Values",ylab="Residuals",ylim=c(-1.1*max(height.res),1.1*max(height.res)),xlim=c(0,1.1*max(height.fit)), main="Residuals vs Fitted Values")
+```
+
+Uniformity is a bit uncertain, but given the small sample size having some kind of trend can signal a relationship. We see the uniformity about 0, which supports the idea of a linear model being the model of best fit for the dataset.
+
+------------------------------------------------------------------------------------------------------------------------------
+
+# Testing Another Model for Comparison
+
+We are trying out other models to make a conclusion of whether or not SLR is the best-fit for this data set. In this portion, we are going to test the results against a curve (quadratic).
+
+## Quadratic Point Fit
+
+$$
+y_{i}=\beta_{0}+\beta_{1}x_{i}+\beta_{2}x_{i}^{2}
+$$
+
+```{r}
+quad.lm=lm(DAMAGE ~ DISTANCE + I(DISTANCE^2),data=firedam)
+
+plot(DAMAGE ~ DISTANCE,bg="Blue",pch=21,cex=1.2,
+   ylim=c(0,1.1*max(DAMAGE)),xlim=c(0,1.1*max(DISTANCE)),main="Scatter Plot and Quadratic of Damage vs Distance",data=firedam)
+myplot = function(x){quad.lm$coef[1] + quad.lm$coef[2]*x + quad.lm$coef[3]*x^2}
+curve(myplot, lwd = 2, add = TRUE)
+```
+
+Fitting a quadratic to the data does not produce a visibly dissimilar result; it looks quite linear, as we have seen prior to this, but further analysis will clarify the results and allow us to make a final decision.
+
+Fitted Value Vector
+
+```{r}
+quad.fit = c(height.fit)
+```
+
+### Plot of Residuals vs Fitted Values
+
+```{r}
+plot(quad.lm, which = 1)
+```
+
+There is symmetry about the y-axis 0 value; however, there are outliers labeled, and the linear trend continues to be displayed, even when a quadratic model is applied.
+
+### Normality Check/Shapiro-Wilks Test
+
+```{r}
+normcheck(quad.lm, shapiro.wilk=TRUE)
+```
+
+The p-value is 0.329. Again, the results of the Shapiro-Wilk test indicate that we do not have enough evidence to reject the null hypothesis, leading us to again assume that the data is distributed normally.
+
+### Model Summary
+
+```{r}
+summary(quad.lm)
+```
+
+This gives us multiple and adjusted $R^{2}$ values, and these:
+
+$$
+\beta_{0}=13.3395 \newline
+\beta_{1}=2.6400 \newline
+\beta_{2}=0.3376
+$$
+
+We can use these values to compare and decide which model is the best fit for the data.
+
+### Confidence Interval (CI) for Parameter Estimates
+
+```{r}
+ciReg(quad.lm, conf.level=0.95, print.out=TRUE)
+```
+
+### Fitted Line Equation
+
+$$
+\beta_{0}+\beta_{1}x_{i}+\beta_{2}x_{i}^{2} = 13.3395 + 2.6400x + 0.3376x^{2}
+$$
+
+### Comparison of the Two Models
+
+#### Making Predictions
+
+I want to try and predict the cost of a fire that is 2, 4, and 6 miles away from the fire station.
+
+Model 1:
+
+```{r}
+amount = predict(firedam.lm, data.frame(DISTANCE=c(2,4,6)))
+amount
+```
+
+Model 2:
+
+```{r}
+amount2 = predict(quad.lm, data.frame(DISTANCE=c(2,4,6)))
+amount2
+```
+
+The predictions made using the first model (linear) seem to be slightly larger that the predictions made using the second model (quadratic), but they are close to one another. More comparisons must be made to determine the best-fit model.
+
+#### Comparing R Values
+
+The multiple $R^{2}$ value for the linear model is 0.9235, while the The adjusted $R^{2}$ value for the linear model is 0.9176. The multiple $R^{2}$ value for the quadratic model is 0.9347, while the adjusted $R^{2}$ value for the quadratic model is 0.9238.
+
+According to these results, both models uphold the assumptions, but the quadratic model is a better fit for the data. The multiple $R^{2}$ value for the quadratic model is higher than that of the linear model, and the adjusted $R^{2}$ value for the quadratic model is also higher than that of the linear model. This indicates that the quadratic model is a better fit for the data. It is important to note that although the quadratic model is a better fit for the data, the linear model is still a good fit.
+
+------------------------------------------------------------------------------------------------------------------------------
+
+# Second Analysis of Data using Cook's Distance
+
+The usage of Cook's distance allows us to avoid biases. We can use Cook's distance to examine outliers and their contribution to the dataset. Cook's distance allows us to calcualte the effect of removing any given data point, If a point has a large Cook's distance, it is considered to need a closer examinating to determine if the data is valid. 
+
+```{r}
+cooks20x(firedam.lm)
+```
+
+This tells us that the observation numbers 13, 11, and 9 have large enough values that they are considered significant and need closer examination. Let us remove each value.
+
+```{r}
+firedam2.lm <- lm(DAMAGE ~ DISTANCE, data = firedam[-c(13),])
+summary(firedam2.lm)
+```
+
+Compare this model with the original:
+
+```{r}
+summary(firedam.lm)
+```
+
+We can see that the residual standard error decreased, the multiple $R^{2}$ increased, and the coefficients shifted values. Based on this comparison we can conclude that the second model (removing one observation) is a better fit for the data.
+
+------------------------------------------------------------------------------------------------------------------------------
+
+# Satisified Assumptions
+
+We have determined that $E(\epsilon)=0$, $V(\epsilon)=\sigma^{2}$, $\epsilon \sim N$, and all errors and response values are independent. Therefore, we can state that all assumptions of simple linear regression (SLR) have been addressed and satisfied.
+
+
+------------------------------------------------------------------------------------------------------------------------------
+
+# Conclusion
+
+We conclude that there is a statistical significance between fire damage and fire distance from the fire station (although linear may not be the strongest fit). Our results showed a clear positive correlation between the cost of fire damage in thousands of dollars and the distance between a fire and a fire station in miles. Going forward, we can then use this statistical model to make predictions about the cost of fire damage based on the distance from the fire station. The results of this analysis can be used by fire insurance companies to better understand the relationship between fire damage and distance from fire stations, and to allocate resources accordingly.
+
+## Suggestions for Improvement
+
+The addition of more data would increase the power of the statistical analysis, potentially reducing the effect of random errors and providing a more accurate representation of the relationship between fire damage and fire distance. Additionally, a larger sample size would allow for a more comprehensive examination of potential outliers and a more robust assessment of the overall validity of the assumptions made in the model.
+
+
+------------------------------------------------------------------------------------------------------------------------------
+
+# References

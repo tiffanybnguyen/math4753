@@ -31,7 +31,7 @@ abstract: This project is all about applications of SLR to real data using R
 
 <center>
 
-![Dr. Wayne Stewart](wayne.jpg "My Picture"){ width=20% }
+![Wayne Stewart](path "My Picture"){ width=20% }
 
 </center>
 
