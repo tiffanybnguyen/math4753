@@ -9,7 +9,9 @@
 #' @export
 #'
 #' @examples 
-#' \dontrun{mymlbeta(sample(rbeta(30, shape1 = 3, shape2 = 4) , length(rbeta(30, shape1 = 3, shape2 = 4) ), replace = TRUE), seq(1, 8, length.out = 100), seq(2, 10, length.out = 100))}
+#' \dontrun{mymlbeta(sample(rbeta(30, shape1 = 3, shape2 = 4) , 
+#'       length(rbeta(30, shape1 = 3, shape2 = 4) ), replace = TRUE), 
+#'       seq(1, 8, length.out = 100), seq(2, 10, length.out = 100))}
 mymlbeta=function(x,alpha,beta,...){  #x sample vector
   
   na=length(alpha) # number of values in alpha

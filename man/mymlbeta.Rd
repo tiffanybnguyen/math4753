@@ -22,5 +22,7 @@ A list containing the sample vector, coordinates of the maximum likelihood estim
 Title mlbeta function
 }
 \examples{
-\dontrun{mymlbeta(sample(rbeta(30, shape1 = 3, shape2 = 4) , length(rbeta(30, shape1 = 3, shape2 = 4) ), replace = TRUE), seq(1, 8, length.out = 100), seq(2, 10, length.out = 100))}
+\dontrun{mymlbeta(sample(rbeta(30, shape1 = 3, shape2 = 4) , 
+      length(rbeta(30, shape1 = 3, shape2 = 4) ), replace = TRUE), 
+      seq(1, 8, length.out = 100), seq(2, 10, length.out = 100))}
 }

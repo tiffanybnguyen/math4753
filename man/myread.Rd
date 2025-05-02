@@ -18,6 +18,5 @@ a data frame of the csv file
 CSV File Reader
 }
 \examples{
-\dontrun{spruce.df=myread("SPRUCE.csv", 
-        "/Users/tiffanynguyen/Documents/College/Sophomore/Spring_2025/Applied_Statistical_Methods/MATH4753nguy0850/labs/lab4/DATAxls/")}
+\dontrun{spruce.df=myread("SPRUCE.csv", "MATH4753nguy0850/labs/lab4/DATAxls/")}
 }

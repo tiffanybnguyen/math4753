@@ -7,8 +7,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{spruce.df=myread("SPRUCE.csv", 
-#'         "/Users/tiffanynguyen/Documents/College/Sophomore/Spring_2025/Applied_Statistical_Methods/MATH4753nguy0850/labs/lab4/DATAxls/")}
+#' \dontrun{spruce.df=myread("SPRUCE.csv", "MATH4753nguy0850/labs/lab4/DATAxls/")}
 myread=function(csv, dird){
   fl=paste(dird,csv,sep="")
   read.table(fl,header=TRUE,sep=",")

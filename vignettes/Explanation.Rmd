@@ -1,0 +1,102 @@
+---
+title: "Package for MATH4753 Spring 2025"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Package for MATH4753 Spring 2025}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(MATH4753nguy0850)
+```
+
+# Introduction
+
+This package is designed to help students learn how to make R packages in MATH4753 at the University of Oklahoma. This package was made for Spring 2025, and will explain how each function works as well as a running example of each.
+
+## data.R
+
+This file contains the dataset for firedam. 
+
+Example usage:
+
+```{r}
+MATH4753nguy0850::FIREDAM
+```
+
+
+## mybin.R
+
+This file contains the function `mybin` which calculates a barplot of the proportion of successes using the binomal distribution.
+
+Example usage:
+
+```{r}
+MATH4753nguy0850::mybin(iter=30, n=10, p=0.7)
+```
+
+
+## myboot2.R
+
+This file contains the bootstrap function which gives a list with confidence interval, function used, and data.
+
+Example usage:
+
+```{r}
+sam <- rnorm(30, mean = 5, sd = 2)
+MATH4753nguy0850::myboot2(iter=10000,x=sam,fun=mean,alpha=0.05)
+```
+
+## mymlbeta.R
+
+This file contains a function that estimates the maximum likelihood parameters for a Beta distribution given a sample of data x, and ranges of candidate values for alpha and beta and gives a list containing the sample vector, coordinates of the maximum likelihood estimate, maximum likelihood value, and the estimated alpha and beta values.
+
+Example usage:
+
+```{r}
+MATH4753nguy0850::mymlbeta(sample(rbeta(30, shape1 = 3, shape2 = 4) , length(rbeta(30, shape1 = 3, shape2 = 4) ), replace = TRUE), seq(1, 8, length.out = 100), seq(2, 10, length.out = 100))
+```
+
+
+## myncurve.R
+
+This file contains a function that visualizes a curve and generates a probability given mu, sigma, and a value for the probability calculation. 
+
+Example usage:
+
+```{r}
+MATH4753nguy0850::myncurve(2, 3, 5)
+```
+
+
+## myread.R
+
+This file contains a function that reads in a CSV file and returns a data frame.
+
+Example usage:
+
+```{r}
+MATH4753nguy0850::myread("SPRUCE.csv","/Users/tiffanynguyen/Documents/College/Sophomore/Spring_2025/Applied_Statistical_Methods/MATH4753nguy0850/labs/lab4/DATAxls/")
+```
+
+
+## ntickets.R
+
+This file contains a function that solves the Flight Overbooking Problem and finds out the correct ticket count.
+
+Example usage:
+
+```{r, fig.width=7, fig.height=5}
+MATH4753nguy0850::ntickets(N=400, gamma=0.02, p=0.95)
+```
+
+
+
